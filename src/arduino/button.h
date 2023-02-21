@@ -4,11 +4,11 @@ class Button {
 
     public:
         Button(int Pin){
-            this -> button = button;
-            pinMode(button, INPUT_PULLUP);
+            this -> pin = pin;
+            pinMode(pin, INPUT_PULLUP);
         }
 
     bool ReturnButtonStatus(){
-        return digitalRead(button);
+        return digitalRead(pin);
     }
 };
