@@ -8,7 +8,7 @@ class Button {
             pinMode(pin, INPUT_PULLUP);
         }
 
-    bool ReturnButtonStatus(){
-        return digitalRead(pin);
-    }
+        bool ReturnButtonStatus(){
+            return digitalRead(pin);
+        }
 };
