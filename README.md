@@ -1,5 +1,5 @@
 # TI-PROJECT3-4
-Projectgroep:
+### **Projectgroep**:
 - Tigo
 - Geert
 - Krijn
@@ -7,7 +7,10 @@ Projectgroep:
 
 
 
-git info:
+### **branching**:
+ Voor elke sprint wordt een branch aangemaakt. aan het einde van de sprint wordt de werkende code naar de main branch gezet
+
+### **git info:**
 1. Altijd eerst pullen om de laatste versie te hebben met 
     > **git pull**
 2. Voeg de bestanden die je wilt committen toe aan de staging area met 
