@@ -13,32 +13,23 @@ public class Main {
     public static void main(String[] args) {
         ImageIcon bankImage = new ImageIcon("././img/banklogo.png");
         ImageIcon bankImageIcon = new ImageIcon("././img/banklogoRond.png");
-        //Border border = BorderFactory.createLineBorder(Color.green, 3);
 
-        // creating a label
-        // JLabel label = new JLabel();
-        // label.setText("Zie hier een bank");
-        // label.setIcon(bankImage);
-        // label.setHorizontalAlignment(JLabel.CENTER);
-        // label.setVerticalTextPosition(JLabel.NORTH);
-        // label.setFont(new Font("MV Boli", Font.PLAIN, 20));
-        // label.setBounds(0, 0, 500, 500);
-        JLabel banklogo = new JLabel();
-        banklogo.setIcon(bankImage);
-        banklogo.setHorizontalAlignment(JLabel.CENTER);
-        //banklogo.setBackground(null);
+        JLabel homescreenlabel1 = new JLabel();
+        homescreenlabel1.setText("Voer uw pas in");
+        homescreenlabel1.setFont(new Font(null, Font.PLAIN, 35));
+        homescreenlabel1.setIcon(bankImage);
+        homescreenlabel1.setVerticalTextPosition(JLabel.BOTTOM);
+        homescreenlabel1.setHorizontalTextPosition(JLabel.CENTER);
+
+        JLabel homescreenlabel2 = new JLabel();
+        // code to be added for the date and time
+
         JPanel homescreen = new JPanel();
-        homescreen.setBounds(0, 0, 500, 500);
-        homescreen.add(banklogo);
-        //homescreen.setBackground(Color.white);
-
-
-
-
-
-
-
+        homescreen.setBounds(500, 100, 500, 500);
+        homescreen.add(homescreenlabel1);
+        homescreen.setBackground(Color.white);
         
+        // Frame waar de GUI in draait
         JFrame frame = new JFrame();
         frame.setIconImage(bankImageIcon.getImage());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,3 +43,20 @@ public class Main {
         frame.add(homescreen);
     }
 }
+
+
+
+
+
+
+
+        //Border border = BorderFactory.createLineBorder(Color.green, 3);
+
+        // creating a label
+        // JLabel label = new JLabel();
+        // label.setText("Zie hier een bank");
+        // label.setIcon(bankImage);
+        // label.setHorizontalAlignment(JLabel.CENTER);
+        // label.setVerticalTextPosition(JLabel.NORTH);
+        // label.setFont(new Font("MV Boli", Font.PLAIN, 20));
+        // label.setBounds(0, 0, 500, 500);
