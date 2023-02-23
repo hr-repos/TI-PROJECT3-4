@@ -9,6 +9,14 @@
 
 SoftwareSerial mySerial(RX_PIN, TX_PIN); // Declare SoftwareSerial obj first
 Adafruit_Thermal printer(&mySerial);     // Pass addr to printer constructor
+// Then see setup() function regarding serial & printer begin() calls.
+
+// Here's the syntax for hardware serial (e.g. Arduino Due) --------------
+// Un-comment the following line if using hardware serial:
+
+//Adafruit_Thermal printer(&Serial1);      // Or Serial2, Serial3, etc.
+
+// -----------------------------------------------------------------------
 
 void setup() {
 
@@ -31,8 +39,22 @@ void setup() {
 
     printer.justify('L');
     printer.setSize('S');
-    printer.println("Welkom bij de Bank bank");
-    printer.feed(1);
+    printer.boldOff();          
+
+    printer.println("________________");
+
+    printer.println("Account : 1234 1234 1234 ");
+    printer.println("Amount : 50 EUR"); 
+    printer.println("Transaction# : 1"); 
+    printer.println("ATM# : Bank bank");  
+    printer.println("________________");
+
+     printer.feed(1);
+    printer.justify('C');
+    printer.boldOn();
+
+    printer.println("Fijne dag nog");
+    printer.feed(3);
 
   printer.sleep();      // Tell printer to sleep
   delay(3000L);         // Sleep for 3 seconds
