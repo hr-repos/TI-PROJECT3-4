@@ -1,6 +1,3 @@
-
-  }
-}
 #include <Keypad.h>
 
 const int ROW_NUM = 4; //four rows
