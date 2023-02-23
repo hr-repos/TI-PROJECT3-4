@@ -1,7 +1,7 @@
 #include <SPI.h>
 #include <MFRC522.h>
 #include <arduinio.h>
-#include <keypad.h>
+#include <Keypad.h>
  
 #define SS_PIN 10
 #define RST_PIN 9
@@ -71,11 +71,11 @@ void loop()
 } 
 
 int code(){
-  string i;
+  String i;
   int tries = 0;
   int keysPressed;
   
-  string code = "1234";
+  String code = "1234";
   while(tries < 3){
   
   cout << "Please enter your pin: ";
