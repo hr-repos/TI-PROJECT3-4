@@ -1,5 +1,6 @@
 #include <SPI.h>
 #include <MFRC522.h>
+#include <arduinio.h>
  
 #define SS_PIN 10
 #define RST_PIN 9
@@ -42,7 +43,7 @@ void loop()
   content.toUpperCase();
   if (content.substring(1) == "93 0E BC 18") //change here the UID of the card/cards that you want to give access
   {
-    Serial.println("Authorized access");
+    code();
     Serial.println();
     delay(3000);
   }
@@ -52,3 +53,31 @@ void loop()
     delay(3000);
   }
 } 
+
+int code(){
+  int i;
+  int tries = 0;
+  
+  int code = 1234;
+  while(tries < 3){
+  
+  cout << "Please enter your pin: ";
+  cin >> i;
+  if(i == code && tries < 3){
+  cout << "The value you entered is " << i;
+  Serial.println(" \nAuthorized access");
+  return 0;
+  }
+
+  else{
+  Serial.println("Try again\n");
+  tries++;
+  int triesLeft = 3 - tries;
+  Serial.print("You have ");
+  Serial.print(triesLeft);
+  Serial.print(" tries left\n" );
+    }
+  }
+    Serial.println("You tried too many times");
+    return 0;
+    }
