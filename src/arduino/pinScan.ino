@@ -3,8 +3,8 @@
 #include <arduinio.h>
 #include <Keypad.h>
  
-#define SS_PIN 10
-#define RST_PIN 9
+#define SS_PIN 12
+#define RST_PIN 11
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
 
 const int ROW_NUM = 4; //four rows
