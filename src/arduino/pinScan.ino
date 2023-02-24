@@ -80,7 +80,7 @@ int code(){
   
   cout << "Please enter your pin: ";
   
-  while(keysPressed > 4){
+  while(keysPressed < 4){
   char key = keypad.getKey();
     if (key) {
         Serial.println(key);
