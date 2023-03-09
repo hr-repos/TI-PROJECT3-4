@@ -3,7 +3,7 @@ package javafiles;
 import javax.swing.*;
 import java.awt.Color;          // for using colors
 import java.awt.Font;           // for using fonts
-import javax.swing.border.Border;
+// import javax.swing.border.Border;
 
 public class Main {
     void createFrame(){
@@ -21,7 +21,7 @@ public class Main {
         homescreenlabel1.setVerticalTextPosition(JLabel.BOTTOM);
         homescreenlabel1.setHorizontalTextPosition(JLabel.CENTER);
 
-        JLabel homescreenlabel2 = new JLabel();
+        // JLabel homescreenlabel2 = new JLabel();
         // code to be added for the date and time
 
         JPanel homescreen = new JPanel();
