@@ -84,6 +84,7 @@ int code(){
   if(i == code && tries < 3){
   cout << "The value you entered is " << i;
   Serial.println(" \nAuthorized access");
+  tries = 0;
   return 0;
   }
 
