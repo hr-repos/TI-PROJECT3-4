@@ -1,10 +1,10 @@
 #include <SPI.h>
 #include <MFRC522.h>
-#include <arduinio.h>
 #include <Keypad.h>
+#include <arduinio.h>
  
-#define SS_PIN 12
-#define RST_PIN 11
+#define SS_PIN 9
+#define RST_PIN 8
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
 
 const int ROW_NUM = 4; //four rows
@@ -17,7 +17,7 @@ char keys[ROW_NUM][COLUMN_NUM] = {
   {'*','0','#', 'D'}
 };
 
-byte pin_rows[ROW_NUM] = { 9, 8, 7, 6 }; //connect to the row pinouts of the keypad
+byte pin_rows[ROW_NUM] = { 12, 11, 7, 6 }; //connect to the row pinouts of the keypad
 byte pin_column[COLUMN_NUM] = { 5, 4, 3, 2 }; //connect to the column pinouts of the keypad
 
 Keypad keypad = Keypad(makeKeymap(keys), pin_rows, pin_column, ROW_NUM, COLUMN_NUM);
@@ -71,7 +71,7 @@ void loop()
 } 
 
 int code(){
-  String i;
+
   int tries = 0;
   int keysPressed;
   
@@ -80,14 +80,7 @@ int code(){
   
   cout << "Please enter your pin: ";
   
-  while(keysPressed < 4){
-  char key = keypad.getKey();
-    if (key) {
-        Serial.println(key);
-        i + key;
-         }
-    }
-
+  String i = writeDigits();
   if(i == code && tries < 3){
   cout << "The value you entered is " << i;
   Serial.println(" \nAuthorized access");
@@ -98,6 +91,7 @@ int code(){
   Serial.println("Try again\n");
   tries++;
   int triesLeft = 3 - tries;
+  int keysPressed = 0;
   Serial.print("You have ");
   Serial.print(triesLeft);
   Serial.print(" tries left\n" );
@@ -106,3 +100,19 @@ int code(){
     Serial.println("You tried too many times");
     return 0;
     }
+
+
+ String writeDigits(){
+     String i;
+     int j = 0;
+  while(j < 4){   
+  char key1 = keypad.getKey();
+    if (key1) {
+        Serial.println(key1);
+        j++;
+        i += key1;
+        }      
+      }
+   Serial.println(i);
+   return i;   
+  }
