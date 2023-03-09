@@ -3,7 +3,7 @@ package lib.code_snippets_notepad;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.awt.Color; // for using colors
-import java.awt.Font; // for using fonts
+//import java.awt.Font; // for using fonts
 import javax.swing.*;
 
 public class snippets {
