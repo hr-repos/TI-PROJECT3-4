@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -15,8 +16,9 @@ import javax.swing.JLabel;
 
 public class GUI {
     private JFrame frame;
-    private JLabel time, labelScanCard, labelWelkom;
-    private JPanel northPanel, centerPanel, homescreen;
+    private JLabel time, labelScanCard, labelWelkom, enterPinLabel, cardDetectedLabel;
+    private JPanel northPanel, centerPanel, homescreen, cardDetectedScreen;
+    private JButton backButton;
     private SimpleDateFormat formatter;
     static ImageIcon bankImage = new ImageIcon("././img/banklogo.png");
     static ImageIcon bankImageIcon = new ImageIcon("././img/banklogoRond.png");
@@ -24,6 +26,7 @@ public class GUI {
 
     private void clearScreen(){
         centerPanel.remove(homescreen);
+        centerPanel.remove(cardDetectedScreen);
     }
 
     public void updateTime(){
@@ -40,7 +43,7 @@ public class GUI {
     }
 
     private void initialize(){
-        // onderdelen die in elk scherm nodig zijn
+        // onderdelen die in meerdere schermen nodig zijn
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1800, 950);
@@ -60,11 +63,11 @@ public class GUI {
         time.setText(dateTime);
         time.setForeground(Color.WHITE);
         
+        backButton = new JButton();
 
         
         // onderdelen voor het hoofdscherm
-        labelScanCard = new JLabel();
-        labelScanCard.setText("Scan uw pas om te beginnen");
+        labelScanCard = new JLabel("Scan uw pas om te beginnen");
         labelScanCard.setFont(new Font(null, Font.PLAIN, 35));
         labelScanCard.setIcon(bankImage);
         labelScanCard.setVerticalTextPosition(JLabel.BOTTOM);
@@ -79,6 +82,27 @@ public class GUI {
         homescreen.add(labelScanCard, BorderLayout.CENTER);
         homescreen.add(labelWelkom, BorderLayout.NORTH);
         homescreen.setBackground(Color.white);
+
+
+        // onderdelen voor het scherm wanneer een pas gedetecteerd is
+        enterPinLabel = new JLabel("Voer uw pincode in");
+        enterPinLabel.setFont(new Font(null, Font.PLAIN, 35));
+        enterPinLabel.setIcon(bankImage);
+        enterPinLabel.setVerticalTextPosition(JLabel.BOTTOM);
+        enterPinLabel.setHorizontalTextPosition(JLabel.CENTER);
+
+        cardDetectedLabel = new JLabel("Uw pas is gedetecteerd");
+        cardDetectedLabel.setVerticalTextPosition(JLabel.TOP);
+        cardDetectedLabel.setHorizontalTextPosition(JLabel.CENTER);
+        cardDetectedLabel.setFont(new Font(null, Font.PLAIN, 60));
+
+        // TODO 4 labels toevoegen voor 1 t/m 4 nummers ingetoetst EN labels uitlijnen
+
+        cardDetectedScreen = new JPanel(new BorderLayout());
+        cardDetectedScreen.add(enterPinLabel, BorderLayout.CENTER);
+        cardDetectedScreen.add(cardDetectedLabel, BorderLayout.NORTH);
+        cardDetectedScreen.setBackground(Color.white);
+
     }
 
     private void startGui() {
@@ -91,5 +115,10 @@ public class GUI {
         clearScreen();
         centerPanel.add(homescreen);
         SwingUtilities.updateComponentTreeUI(frame);
+    }
+
+    public void setCardDetectedScreen(){
+        clearScreen();
+        centerPanel.add(cardDetectedScreen);
     }
 }
