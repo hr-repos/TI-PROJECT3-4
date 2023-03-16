@@ -1,7 +1,6 @@
 #include <SPI.h>
 #include <MFRC522.h>
 #include <Keypad.h>
-#include <arduinio.h>
  
 #define SS_PIN 9
 #define RST_PIN 8
@@ -78,13 +77,12 @@ int code(){
   String code = "1234";
   while(tries < 3){
   
-  cout << "Please enter your pin: ";
+  Serial.println("Please enter your pin");
   
   String i = writeDigits();
   if(i == code && tries < 3){
-  cout << "The value you entered is " << i;
+  Serial.println(" The value you entered is " + i);
   Serial.println(" \nAuthorized access");
-  tries = 0;
   return 0;
   }
 
@@ -108,6 +106,15 @@ int code(){
      int j = 0;
   while(j < 4){   
   char key1 = keypad.getKey();
+    if (key1) {
+        Serial.println(key1);
+        j++;
+        i += key1;
+        }      
+      }
+   Serial.println(i);
+   return i;   
+  }
     if (key1) {
         Serial.println(key1);
         j++;
