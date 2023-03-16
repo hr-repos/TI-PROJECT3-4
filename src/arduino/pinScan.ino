@@ -32,7 +32,10 @@ void setup()
 }
 void loop() 
 {
-  // Look for new cards
+  cardScanner();
+} 
+
+void cardScanner(){// Look for new cards
   if ( ! mfrc522.PICC_IsNewCardPresent()) 
   {
     return;
@@ -67,7 +70,7 @@ void loop()
     Serial.println(" Access denied");
     delay(3000);
   }
-} 
+ }
 
 int code(){
 
@@ -81,7 +84,7 @@ int code(){
   
   String i = writeDigits();
   if(i == code && tries < 3){
-  Serial.println(" The value you entered is " + i);
+  Serial.println("The value you entered is " + i);
   Serial.println(" \nAuthorized access");
   return 0;
   }
@@ -127,7 +130,7 @@ int code(){
         Serial.println(i);
         j--;
         key2 = key1;
-      }
+      } 
     else {
         temp = i;
         j++;
