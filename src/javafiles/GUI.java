@@ -16,13 +16,14 @@ import javax.swing.JLabel;
 
 public class GUI {
     private JFrame frame;
-    private JLabel time, labelScanCard, labelWelkom, enterPinLabel, cardDetectedLabel;
+    private JLabel time, labelScanCard, labelWelkom, enterPinLabel, cardDetectedLabel, pinNumbersEnterdLabel;
     private JPanel northPanel, centerPanel, homescreen, cardDetectedScreen;
     private JButton backButton;
     private SimpleDateFormat formatter;
-    static ImageIcon bankImage = new ImageIcon("././img/banklogo.png");
-    static ImageIcon bankImageIcon = new ImageIcon("././img/banklogoRond.png");
-    String dateTime = "Hier moet de tijd komen";
+    private static ImageIcon bankImage = new ImageIcon("././img/banklogo.png");
+    private static ImageIcon bankImageIcon = new ImageIcon("././img/banklogoRond.png");
+    private String dateTime = "Hier moet de tijd komen";
+    private String numbersPinEnterd = "_ - _ - _ - _";
 
     private void clearScreen(){
         centerPanel.remove(homescreen);
@@ -46,7 +47,7 @@ public class GUI {
         // onderdelen die in meerdere schermen nodig zijn
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1800, 950);
+        frame.setSize(1600, 800);
         frame.setLayout(new BorderLayout());
         frame.setVisible(true);
         
@@ -96,11 +97,16 @@ public class GUI {
         cardDetectedLabel.setHorizontalTextPosition(JLabel.CENTER);
         cardDetectedLabel.setFont(new Font(null, Font.PLAIN, 60));
 
-        // TODO 4 labels toevoegen voor 1 t/m 4 nummers ingetoetst EN labels uitlijnen
+        pinNumbersEnterdLabel = new JLabel();
+        pinNumbersEnterdLabel.setText(numbersPinEnterd);
+        pinNumbersEnterdLabel.setFont(new Font(null, Font.PLAIN, 30));
+        pinNumbersEnterdLabel.setVerticalTextPosition(JLabel.BOTTOM);
+        cardDetectedLabel.setHorizontalTextPosition(JLabel.CENTER);
 
         cardDetectedScreen = new JPanel(new BorderLayout());
         cardDetectedScreen.add(enterPinLabel, BorderLayout.CENTER);
         cardDetectedScreen.add(cardDetectedLabel, BorderLayout.NORTH);
+        cardDetectedScreen.add(pinNumbersEnterdLabel, BorderLayout.SOUTH);
         cardDetectedScreen.setBackground(Color.white);
 
     }
@@ -119,6 +125,29 @@ public class GUI {
 
     public void setCardDetectedScreen(){
         clearScreen();
-        centerPanel.add(cardDetectedScreen);
+        centerPanel.add(cardDetectedScreen, BorderLayout.CENTER);
+    }
+
+    public void setPinNumbersEntered(int totalNumbersEnterd){
+        if (totalNumbersEnterd == 0) {
+            numbersPinEnterd = "_ - _ - _ - _";
+        }
+        else if (totalNumbersEnterd == 1) {
+            numbersPinEnterd = "X - _ - _ - _";
+        }
+        else if (totalNumbersEnterd == 2) {
+            numbersPinEnterd = "X - X - _ - _";
+        }
+        else if (totalNumbersEnterd == 3) {
+            numbersPinEnterd = "X - X - X - _";
+        }
+        else if (totalNumbersEnterd == 3) {
+            numbersPinEnterd = "X - X - X - X";
+        }
+        else {
+            System.out.println("ERROR: Aantal ingetoetste getallen moet vallen binnen 0 t/m 4");
+            System.out.println("No changes were made!");
+
+        }
     }
 }
