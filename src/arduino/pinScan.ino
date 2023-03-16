@@ -102,25 +102,40 @@ int code(){
 
 
  String writeDigits(){
-     String i;
+     String i, temp;
      int j = 0;
-  while(j < 4){   
+     char key2; 
+  while(j < 10){   
   char key1 = keypad.getKey();
-    if (key1) {
-        Serial.println(key1);
+   
+  String back = i;
+  if(key1){
+    
+    if (key1 == '#'){
+      Serial.println(i);
+      return i; 
+      }
+    else if(key1 == '*' && key2 == '*'){
+        i = "";
+        temp = i;
+        Serial.println("Start from the beginning");
+        j = 0;
+      }
+    else if (key1 == '*' && j > 0){
+        i = temp;
+        Serial.println("removed last digit");
+        Serial.println(i);
+        j--;
+        key2 = key1;
+      }
+    else {
+        temp = i;
         j++;
         i += key1;
-        }      
+        Serial.println(i);
+        key2 = key1;
+        }     
       }
-   Serial.println(i);
-   return i;   
-  }
-    if (key1) {
-        Serial.println(key1);
-        j++;
-        i += key1;
-        }      
-      }
-   Serial.println(i);
-   return i;   
+    }
+    Serial.println("Too many symbols");  
   }
