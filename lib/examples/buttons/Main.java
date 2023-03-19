@@ -1,4 +1,4 @@
-package lib.examples.buttons;
+package buttons;
 import javax.swing.*;
 import java.awt.*;
 

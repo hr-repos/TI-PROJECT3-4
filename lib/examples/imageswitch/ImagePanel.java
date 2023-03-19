@@ -1,4 +1,4 @@
-package lib.examples.imageswitch;
+package imageswitch;
 
 import java.awt.Dimension;
 import java.awt.Graphics;

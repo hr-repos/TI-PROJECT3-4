@@ -1,4 +1,4 @@
-package lib.examples.imageswitch;
+package imageswitch;
 import javax.swing.*;
 
 import java.awt.*;
