@@ -1,9 +1,7 @@
+
 #include "Adafruit_Thermal.h"
 #include "adalogo.h"
 #include "adaqrcode.h"
-
-// Here's the new syntax when using SoftwareSerial (e.g. Arduino Uno) ----
-// If using hardware serial instead, comment out or remove these lines:
 
 #include "SoftwareSerial.h"
 #define TX_PIN 6 // Arduino transmit  YELLOW WIRE  labeled RX on printer
@@ -32,7 +30,31 @@ void setup() {
   //Serial1.begin(19200); // Use this instead if using hardware serial
   printer.begin();        // Init printer (same regardless of serial type)
 
-  printer.println("Project test 1");
+   printer.justify('C');
+    printer.boldOn();
+    printer.setSize('L');
+
+    printer.println("De Bank bank");
+    printer.println("________________");
+
+    printer.justify('L');
+    printer.setSize('S');
+    printer.boldOff();          
+
+    printer.println("________________");
+
+    printer.println("Account : 1234 1234 1234 ");
+    printer.println("Amount : 50 EUR"); 
+    printer.println("Transaction# : 1"); 
+    printer.println("ATM# : Bank bank");  
+    printer.println("________________");
+
+     printer.feed(1);
+    printer.justify('C');
+    printer.boldOn();
+
+    printer.println("Fijne dag nog");
+    printer.feed(3);
 
   printer.sleep();      // Tell printer to sleep
   delay(3000L);         // Sleep for 3 seconds
