@@ -29,22 +29,22 @@ public class theSwitch {
 
   public void readData() {
     while (true) {
-      try {
-        // Check if there are bytes available to be read from the input buffer
-        if (serialPort.bytesAvailable() > 0) {
-          String inputLine = input.readLine();
-          System.out.println(inputLine);
-          if (inputLine.equals("a")) {
-            SwingUtilities.invokeLater(() -> scherm.setHomeScreen());
-          } else if (inputLine.equals("b")) {
-            SwingUtilities.invokeLater(() -> scherm.setCardDetectedScreen());
-          }
+        try {
+            // Check if there are bytes available to be read from the input buffer
+            if (serialPort.bytesAvailable() > 0) {
+                String inputLine = input.readLine();
+                System.out.println(inputLine);
+                if (inputLine.equals("a")) {
+                    SwingUtilities.invokeLater(() -> scherm.setHomeScreen());
+                } else if (inputLine.equals("b")) {
+                    SwingUtilities.invokeLater(() -> scherm.setCardDetectedScreen());
+                }
+            }
+        } catch (Exception e) {
+            System.err.println(e.toString());
         }
-      } catch (Exception e) {
-        System.err.println(e.toString());
-      }
     }
-  }
+}
 
   public static void main(String[] args) {
     GUI scherm = new GUI();

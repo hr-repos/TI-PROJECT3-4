@@ -123,9 +123,10 @@ public class GUI {
         SwingUtilities.updateComponentTreeUI(frame);
     }
 
-    public void setCardDetectedScreen(){
-        clearScreen();
-        centerPanel.add(cardDetectedScreen, BorderLayout.CENTER);
+    public void setCardDetectedScreen() {
+        centerPanel.removeAll();
+        centerPanel.add(cardDetectedScreen);
+        SwingUtilities.updateComponentTreeUI(frame);
     }
 
     public void setPinNumbersEntered(int totalNumbersEnterd){
