@@ -37,6 +37,7 @@ public class theSwitch {
                 if (inputLine.equals("a")) {
                     SwingUtilities.invokeLater(() -> scherm.setHomeScreen());
                 } else if (inputLine.equals("b")) {
+                  scherm.setPinNumbersEntered(3);
                     SwingUtilities.invokeLater(() -> scherm.setCardDetectedScreen());
                 }
             }
