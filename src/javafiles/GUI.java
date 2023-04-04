@@ -142,7 +142,7 @@ public class GUI {
         else if (totalNumbersEnterd == 3) {
             numbersPinEnterd = "X - X - X - _";
         }
-        else if (totalNumbersEnterd == 3) {
+        else if (totalNumbersEnterd == 4) {
             numbersPinEnterd = "X - X - X - X";
         }
         else {
