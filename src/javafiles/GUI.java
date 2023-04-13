@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color; // for using colors
 import java.awt.Dimension;
 import java.awt.Font; // for using fonts
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Component;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,8 +20,8 @@ import javax.swing.JLabel;
 
 public class GUI {
     private JFrame frame;
-    private JLabel time, labelScanCard, labelWelkom, enterPinLabel, cardDetectedLabel, pinNumbersEnterdLabel, attempsLabel;
-    private JPanel northPanel, centerPanel, homescreen, cardDetectedScreen;
+    private JLabel time, labelScanCard, labelWelkom, enterPinLabel, cardDetectedLabel, pinNumbersEnterdLabel, attempsLabel, bankImageLabel, textMaakKeuzeLabel, textSaldoBekijkenLabel, textAfbrekenLabel, textGeldOpnemenLabel, textSnelOpnemenLabel;;
+    private JPanel northPanel, centerPanel, westPanel, eastPanel, homescreen, cardDetectedScreen, loggedInScreen, loggedInScreenLeft, loggedInScreenRight;
     private JButton backButton;
     private SimpleDateFormat formatter;
     private static ImageIcon bankImage = new ImageIcon("././img/banklogo.png");
@@ -30,6 +32,8 @@ public class GUI {
     private String attempsLeft2 = " pogingen over";
     private String attempsLeft = "U heeft nog 3 pogingen over";
 
+    private GridBagConstraints gbc = new GridBagConstraints();
+    
     public static final int homeScreen = 0;
     public static final int cardScreen = 1;
 
@@ -46,8 +50,9 @@ public class GUI {
     }
 
     private void clearScreen(){
-        centerPanel.remove(homescreen);
-        centerPanel.remove(cardDetectedScreen);
+        centerPanel.removeAll();
+        westPanel.removeAll();
+        eastPanel.removeAll();
     }
 
     public void updateTime(){
@@ -61,6 +66,7 @@ public class GUI {
         initialize();
         startGui();
         setHomeScreen();
+        updateTime();
     }
 
     private void initialize(){
@@ -75,8 +81,13 @@ public class GUI {
         northPanel.setBackground(new Color(110, 136, 241)); // north panel
         northPanel.setPreferredSize(new Dimension(100, 50));
         centerPanel = new JPanel();
-        centerPanel.setBackground(Color.white); // center panel
-        centerPanel.setPreferredSize(new Dimension(100, 100));
+        centerPanel.setBackground(Color.white); 
+        eastPanel = new JPanel();
+        eastPanel.setLayout(new GridBagLayout());
+        eastPanel.setBackground(Color.white); 
+
+        westPanel = new JPanel(new GridBagLayout());
+        westPanel.setBackground(Color.white); 
         
         formatter = new SimpleDateFormat("dd-MM-yyyy '  ' HH:mm   ");
         time = new JLabel();
@@ -84,7 +95,7 @@ public class GUI {
         time.setText(dateTime);
         time.setForeground(Color.WHITE);
         
-        backButton = new JButton();
+        bankImageLabel = new JLabel(bankImage);
 
         
         // onderdelen voor het hoofdscherm
@@ -142,12 +153,55 @@ public class GUI {
         cardDetectedScreen.setBackground(Color.white);
 
 
+        // onderdelen voor het scherm wanneer er ingelogd is
+        // wordt toegevoegd aan west panel
+        textSaldoBekijkenLabel = new JLabel("<-- Saldo bekijken");
+        textSaldoBekijkenLabel.setFont(new Font(null, Font.PLAIN, 35));
+        textAfbrekenLabel = new JLabel("<-- Afbreken");
+        textAfbrekenLabel.setFont(new Font(null, Font.PLAIN, 35));
+
+        loggedInScreenLeft = new JPanel();
+        loggedInScreenLeft.setLayout(new BoxLayout(loggedInScreenLeft, BoxLayout.Y_AXIS));
+        loggedInScreenLeft.add(textSaldoBekijkenLabel);
+        loggedInScreenLeft.add(textAfbrekenLabel);
+        loggedInScreenLeft.setBackground(Color.white);
+
+        // wordt toegevoegd aan east panel
+        textGeldOpnemenLabel = new JLabel("Geld opnemen -->");
+        textGeldOpnemenLabel.setFont(new Font(null, Font.PLAIN, 35));
+        textSnelOpnemenLabel = new JLabel("Snel opnemen -->");
+        textSnelOpnemenLabel.setFont(new Font(null, Font.PLAIN, 35));
+
+        loggedInScreenRight = new JPanel();
+        loggedInScreenRight.setLayout(new BoxLayout(loggedInScreenRight, BoxLayout.Y_AXIS));
+        loggedInScreenRight.setBackground(Color.white);
+        loggedInScreenRight.add(textGeldOpnemenLabel);
+        loggedInScreenRight.add(textSnelOpnemenLabel);
+
+        frame.add(loggedInScreenLeft);
+        frame.add(loggedInScreenRight);
+
+        // wordt toegevoegd aan centerpanel
+        textMaakKeuzeLabel = new JLabel("Welkom, maak uw keuze");
+        textMaakKeuzeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        textMaakKeuzeLabel.setFont(new Font(null, Font.PLAIN, 50));
+
+        loggedInScreen = new JPanel();
+        loggedInScreen.setLayout(new BorderLayout());
+        loggedInScreen.setBackground(Color.white);
+        loggedInScreen.add(bankImageLabel, BorderLayout.NORTH);
+        loggedInScreen.add(textMaakKeuzeLabel, BorderLayout.CENTER);
+        loggedInScreen.setBackground(Color.white);
+
+
     }
 
     private void startGui() {
         northPanel.add(time, BorderLayout.EAST);
         frame.add(northPanel, BorderLayout.NORTH);
         frame.add(centerPanel, BorderLayout.CENTER);
+        frame.add(eastPanel, BorderLayout.EAST);
+        frame.add(westPanel, BorderLayout.WEST);
     }
 
     public void setHomeScreen() {
@@ -157,8 +211,18 @@ public class GUI {
     }
 
     public void setCardDetectedScreen() {
-        centerPanel.removeAll();
+        clearScreen();
         centerPanel.add(cardDetectedScreen);
+        SwingUtilities.updateComponentTreeUI(frame);
+    }
+
+    public void setLoggedInScreen(){
+        clearScreen();
+        centerPanel.add(loggedInScreen);
+        westPanel.add(loggedInScreenLeft, gbc);
+        westPanel.setAlignmentY(JLabel.CENTER);
+        eastPanel.add(loggedInScreenRight);
+        eastPanel.setAlignmentY(JLabel.CENTER);
         SwingUtilities.updateComponentTreeUI(frame);
     }
 
