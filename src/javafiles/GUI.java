@@ -4,9 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.Color; // for using colors
 import java.awt.Dimension;
 import java.awt.Font; // for using fonts
+import java.awt.Component;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -91,23 +93,28 @@ public class GUI {
         enterPinLabel.setIcon(bankImage);
         enterPinLabel.setVerticalTextPosition(JLabel.BOTTOM);
         enterPinLabel.setHorizontalTextPosition(JLabel.CENTER);
+        enterPinLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         cardDetectedLabel = new JLabel("Uw pas is gedetecteerd");
         cardDetectedLabel.setVerticalTextPosition(JLabel.TOP);
         cardDetectedLabel.setHorizontalTextPosition(JLabel.CENTER);
         cardDetectedLabel.setFont(new Font(null, Font.PLAIN, 60));
+        cardDetectedLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         pinNumbersEnterdLabel = new JLabel();
         pinNumbersEnterdLabel.setText(numbersPinEnterd);
         pinNumbersEnterdLabel.setFont(new Font(null, Font.PLAIN, 30));
         pinNumbersEnterdLabel.setVerticalTextPosition(JLabel.BOTTOM);
-        cardDetectedLabel.setHorizontalTextPosition(JLabel.CENTER);
+        pinNumbersEnterdLabel.setHorizontalTextPosition(JLabel.CENTER);
+        pinNumbersEnterdLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        cardDetectedScreen = new JPanel(new BorderLayout());
-        cardDetectedScreen.add(enterPinLabel, BorderLayout.CENTER);
+        cardDetectedScreen = new JPanel();
+        cardDetectedScreen.setLayout(new BoxLayout(cardDetectedScreen, BoxLayout.Y_AXIS));
         cardDetectedScreen.add(cardDetectedLabel, BorderLayout.NORTH);
+        cardDetectedScreen.add(enterPinLabel, BorderLayout.CENTER);
         cardDetectedScreen.add(pinNumbersEnterdLabel, BorderLayout.SOUTH);
         cardDetectedScreen.setBackground(Color.white);
+
 
     }
 
