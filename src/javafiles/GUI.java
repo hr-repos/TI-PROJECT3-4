@@ -25,6 +25,21 @@ public class GUI {
     private String dateTime = "Hier moet de tijd komen";
     private String numbersPinEnterd = "_ - _ - _ - _";
 
+    public static final int homeScreen = 0;
+    public static final int cardScreen = 1;
+
+    private int currentScreen = homeScreen;
+
+    public void switchToScreen(int screen) {
+        // Switch to the specified screen
+        currentScreen = screen;
+    }
+
+    public boolean isCurrentScreen(int screen) {
+        // Check if the current screen matches the specified screen
+        return currentScreen == screen;
+    }
+
     private void clearScreen(){
         centerPanel.remove(homescreen);
         centerPanel.remove(cardDetectedScreen);

@@ -1,4 +1,6 @@
 #include <Keypad.h>
+#include <SPI.h>
+#include <MFRC522.h>
 
 // Define the key matrix
 const byte ROWS = 4;
@@ -14,6 +16,10 @@ char keys[ROWS][COLS] = {
 byte rowPins[ROWS] = {12, 11, 7, 6 }; // Connect to row pinouts of the keypad
 byte colPins[COLS] = {5, 4, 3, 2}; // Connect to column pinouts of the keypad
 Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
+
+#define SS_PIN 9
+#define RST_PIN 8
+MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
 
 // Define a class to handle keypad input
 class KeypadHandler {
@@ -67,9 +73,28 @@ class KeypadHandler {
 KeypadHandler keypadHandler;
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(9600);   // Initiate a serial communication
+  SPI.begin();      // Initiate  SPI bus
+  mfrc522.PCD_Init();   // Initiate MFRC522
 }
 
 void loop() {
+  cardScanner();
   keypadHandler.readKeypad();
 }
+
+void cardScanner(){// Look for new cards
+  if ( ! mfrc522.PICC_IsNewCardPresent()) 
+  {
+    return;
+  }
+  // Select one of the cards
+  if ( ! mfrc522.PICC_ReadCardSerial()) 
+  {
+    return;
+  }
+  char buttonPress[] = "pass found";
+  Serial.println(buttonPress); // sends a \n with text
+  
+  }
+ 
