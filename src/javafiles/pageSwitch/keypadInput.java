@@ -22,6 +22,7 @@ public class keypadInput {
     this.scherm = scherm;
   }
 
+  //code to initialize java and arduino
   public void initialize() {
     serialPort = SerialPort.getCommPort("COM8"); // Personal COM 6 for uno and 8 for mega
     serialPort.setBaudRate(9600);
@@ -37,6 +38,7 @@ public class keypadInput {
             if (serialPort.bytesAvailable() > 0) {
                 String inputLine = input.readLine();
                 System.out.println(inputLine);
+                //checks what screen is currently visible
                 if (scherm.isCurrentScreen(0)) {
                     currentScreenZero(inputLine);
                     continue;
@@ -57,6 +59,7 @@ public void updateSetPinNumbersEntered(int count){
   SwingUtilities.invokeLater(() -> scherm.setCardDetectedScreen());
 }
 
+//code for homeScreen
 public void currentScreenZero(String inputLine) {
   if (inputLine.equals("pass found")) {
       updateSetPinNumbersEntered(0);
@@ -65,8 +68,9 @@ public void currentScreenZero(String inputLine) {
   else{}
 }
 
+//code for pinScreen
 public void currentScreenOne(String inputLine) {
-  
+  //checks what the input is
   if (inputLine.equals("plus")) {
       if (count < 5) {
           count++;
@@ -87,8 +91,10 @@ public void currentScreenOne(String inputLine) {
           updateSetPinNumbersEntered(count);
       } else {
           SwingUtilities.invokeLater(() -> scherm.setHomeScreen());
+          scherm.switchToScreen(0);
       }   
   } else if (inputLine.equals("correct")) {
+    //hier kan het volgende scherm
       SwingUtilities.invokeLater(() -> scherm.setCardDetectedScreen());
   }
 }
