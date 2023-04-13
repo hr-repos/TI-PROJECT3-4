@@ -3,7 +3,6 @@ package javafiles;
 import java.sql.*;
 
 public class database {
-//test
    static String url = "jdbc:mysql://145.24.222.188:8649/bank";
    static String username = "sqluser";
    static String password = "q76^UQT7!BcR";
@@ -42,7 +41,7 @@ public class database {
         String Name = rs.getString("name");
         String Country = rs.getString("country");
         int Birthyear = rs.getInt("Birthyear");
-        System.out.println("ID: " + id + ", Name: " + Name + ", Email: " + Country + ", Birthyear: " + Birthyear);
+        System.out.println("ID: " + id + ", Name: " + Name + ", Country: " + Country + ", Birthyear: " + Birthyear);
       }
 
       // close the result set, statement, and connection
