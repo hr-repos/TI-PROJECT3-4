@@ -3,7 +3,7 @@ package javafiles;
 import java.sql.*;
 
 public class database {
-
+//test
    static String url = "jdbc:mysql://145.24.222.188:8649/bank";
    static String username = "sqluser";
    static String password = "q76^UQT7!BcR";
