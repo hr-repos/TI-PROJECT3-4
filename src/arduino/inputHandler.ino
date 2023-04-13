@@ -141,7 +141,7 @@ void cardScanner(){// Look for new cards
         char buttonPress[] = "c";
         Serial.println(buttonPress); // sends a \n with text
         }
-      if(buttonState3 == HIGH){
+      if(buttonState4 == HIGH){
         char buttonPress[] = "d";
         Serial.println(buttonPress); // sends a \n with text
         }
