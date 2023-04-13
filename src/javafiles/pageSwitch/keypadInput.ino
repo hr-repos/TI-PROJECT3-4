@@ -21,6 +21,8 @@ Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 #define RST_PIN 8
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
 
+boolean passwordIsTrue = true;
+
 // Define a class to handle keypad input
 class KeypadHandler {
   private:
@@ -60,6 +62,7 @@ class KeypadHandler {
         if (strcmp(code, "1234") == 0) {
           char buttonPress[] = "correct";
           Serial.println(buttonPress); // sends a \n with text
+          passwordIsTrue = false;
         } else {
           char buttonPress[] = "wrong";
           Serial.println(buttonPress); // sends a \n with text
@@ -80,7 +83,7 @@ void setup() {
 
 void loop() {
   cardScanner();
-  keypadHandler.readKeypad();
+  
 }
 
 void cardScanner(){// Look for new cards
@@ -95,6 +98,8 @@ void cardScanner(){// Look for new cards
   }
   char buttonPress[] = "pass found";
   Serial.println(buttonPress); // sends a \n with text
-  
+  while(passwordIsTrue){
+      keypadHandler.readKeypad();
+    }
   }
  
