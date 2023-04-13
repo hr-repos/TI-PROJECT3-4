@@ -18,7 +18,7 @@ import javax.swing.JLabel;
 
 public class GUI {
     private JFrame frame;
-    private JLabel time, labelScanCard, labelWelkom, enterPinLabel, cardDetectedLabel, pinNumbersEnterdLabel;
+    private JLabel time, labelScanCard, labelWelkom, enterPinLabel, cardDetectedLabel, pinNumbersEnterdLabel, attempsLabel;
     private JPanel northPanel, centerPanel, homescreen, cardDetectedScreen;
     private JButton backButton;
     private SimpleDateFormat formatter;
@@ -26,6 +26,9 @@ public class GUI {
     private static ImageIcon bankImageIcon = new ImageIcon("././img/banklogoRond.png");
     private String dateTime = "Hier moet de tijd komen";
     private String numbersPinEnterd = "_ - _ - _ - _";
+    private String attempsLeft1 = "U heeft nog ";
+    private String attempsLeft2 = " pogingen over";
+    private String attempsLeft = "U heeft nog 3 pogingen over";
 
     public static final int homeScreen = 0;
     public static final int cardScreen = 1;
@@ -123,11 +126,19 @@ public class GUI {
         pinNumbersEnterdLabel.setHorizontalTextPosition(JLabel.CENTER);
         pinNumbersEnterdLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        attempsLabel = new JLabel();
+        attempsLabel.setText(attempsLeft);
+        attempsLabel.setFont(new Font(null, Font.PLAIN, 30));
+        attempsLabel.setVerticalTextPosition(JLabel.BOTTOM);
+        attempsLabel.setHorizontalTextPosition(JLabel.CENTER);
+        attempsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         cardDetectedScreen = new JPanel();
         cardDetectedScreen.setLayout(new BoxLayout(cardDetectedScreen, BoxLayout.Y_AXIS));
         cardDetectedScreen.add(cardDetectedLabel, BorderLayout.NORTH);
         cardDetectedScreen.add(enterPinLabel, BorderLayout.CENTER);
         cardDetectedScreen.add(pinNumbersEnterdLabel, BorderLayout.SOUTH);
+        cardDetectedScreen.add(attempsLabel, BorderLayout.SOUTH);
         cardDetectedScreen.setBackground(Color.white);
 
 
@@ -177,5 +188,12 @@ public class GUI {
             System.out.println("No changes were made!");
 
         }
+    }
+
+    public void attempsLeft(int attemps){
+        int attempsRemaining = 3 - attemps;
+
+        String attempsLeft = attempsLeft1 + attempsRemaining + attempsLeft2;
+        attempsLabel.setText(attempsLeft);
     }
 }

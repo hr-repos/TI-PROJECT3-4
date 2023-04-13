@@ -16,6 +16,7 @@ public class keypadInput {
   private final GUI scherm;
   private int count;
   private int triesLeft = 3;
+  private int wrongTries;
 
   public keypadInput(GUI scherm) {
     this.scherm = scherm;
@@ -80,7 +81,9 @@ public void currentScreenOne(String inputLine) {
       if (triesLeft > 1) {
           count = 0;
           triesLeft--;
+          wrongTries++;
           System.out.println("Je hebt nog " + triesLeft + " pogingen");
+          scherm.attempsLeft(wrongTries);
           updateSetPinNumbersEntered(count);
       } else {
           SwingUtilities.invokeLater(() -> scherm.setHomeScreen());
