@@ -10,6 +10,7 @@ import java.awt.Component;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -156,26 +157,28 @@ public class GUI {
         // onderdelen voor het scherm wanneer er ingelogd is
         // wordt toegevoegd aan west panel
         textSaldoBekijkenLabel = new JLabel("<-- Saldo bekijken");
-        textSaldoBekijkenLabel.setFont(new Font(null, Font.PLAIN, 35));
+        textSaldoBekijkenLabel.setFont(new Font(null, Font.PLAIN, 60));
         textAfbrekenLabel = new JLabel("<-- Afbreken");
-        textAfbrekenLabel.setFont(new Font(null, Font.PLAIN, 35));
+        textAfbrekenLabel.setFont(new Font(null, Font.PLAIN, 60));
 
         loggedInScreenLeft = new JPanel();
         loggedInScreenLeft.setLayout(new BoxLayout(loggedInScreenLeft, BoxLayout.Y_AXIS));
         loggedInScreenLeft.add(textSaldoBekijkenLabel);
+        loggedInScreenLeft.add(Box.createVerticalStrut(300)); // add some vertical space between the labels
         loggedInScreenLeft.add(textAfbrekenLabel);
         loggedInScreenLeft.setBackground(Color.white);
 
         // wordt toegevoegd aan east panel
         textGeldOpnemenLabel = new JLabel("Geld opnemen -->");
-        textGeldOpnemenLabel.setFont(new Font(null, Font.PLAIN, 35));
+        textGeldOpnemenLabel.setFont(new Font(null, Font.PLAIN, 60));
         textSnelOpnemenLabel = new JLabel("Snel opnemen -->");
-        textSnelOpnemenLabel.setFont(new Font(null, Font.PLAIN, 35));
+        textSnelOpnemenLabel.setFont(new Font(null, Font.PLAIN, 60));
 
         loggedInScreenRight = new JPanel();
         loggedInScreenRight.setLayout(new BoxLayout(loggedInScreenRight, BoxLayout.Y_AXIS));
         loggedInScreenRight.setBackground(Color.white);
         loggedInScreenRight.add(textGeldOpnemenLabel);
+        loggedInScreenRight.add(Box.createVerticalStrut(300)); // add some vertical space between the labels
         loggedInScreenRight.add(textSnelOpnemenLabel);
 
         frame.add(loggedInScreenLeft);
