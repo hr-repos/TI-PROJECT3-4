@@ -157,9 +157,9 @@ public class GUI {
         // onderdelen voor het scherm wanneer er ingelogd is
         // wordt toegevoegd aan west panel
         textSaldoBekijkenLabel = new JLabel("<-- Saldo bekijken");
-        textSaldoBekijkenLabel.setFont(new Font(null, Font.PLAIN, 60));
+        textSaldoBekijkenLabel.setFont(new Font(null, Font.PLAIN, 40));
         textAfbrekenLabel = new JLabel("<-- Afbreken");
-        textAfbrekenLabel.setFont(new Font(null, Font.PLAIN, 60));
+        textAfbrekenLabel.setFont(new Font(null, Font.PLAIN, 40));
 
         loggedInScreenLeft = new JPanel();
         loggedInScreenLeft.setLayout(new BoxLayout(loggedInScreenLeft, BoxLayout.Y_AXIS));
@@ -170,9 +170,9 @@ public class GUI {
 
         // wordt toegevoegd aan east panel
         textGeldOpnemenLabel = new JLabel("Geld opnemen -->");
-        textGeldOpnemenLabel.setFont(new Font(null, Font.PLAIN, 60));
+        textGeldOpnemenLabel.setFont(new Font(null, Font.PLAIN, 40));
         textSnelOpnemenLabel = new JLabel("Snel opnemen -->");
-        textSnelOpnemenLabel.setFont(new Font(null, Font.PLAIN, 60));
+        textSnelOpnemenLabel.setFont(new Font(null, Font.PLAIN, 40));
 
         loggedInScreenRight = new JPanel();
         loggedInScreenRight.setLayout(new BoxLayout(loggedInScreenRight, BoxLayout.Y_AXIS));
@@ -187,7 +187,7 @@ public class GUI {
         // wordt toegevoegd aan centerpanel
         textMaakKeuzeLabel = new JLabel("Welkom, maak uw keuze");
         textMaakKeuzeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        textMaakKeuzeLabel.setFont(new Font(null, Font.PLAIN, 50));
+        textMaakKeuzeLabel.setFont(new Font(null, Font.PLAIN, 60));
 
         loggedInScreen = new JPanel();
         loggedInScreen.setLayout(new BorderLayout());
