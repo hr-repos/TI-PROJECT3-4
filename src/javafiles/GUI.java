@@ -3,6 +3,7 @@ package javafiles;
 import java.awt.BorderLayout;
 import java.awt.Color; // for using colors
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font; // for using fonts
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -22,8 +23,8 @@ import javax.swing.JLabel;
 
 public class GUI {
     private JFrame frame;
-    private JLabel time, labelScanCard, labelWelkom, enterPinLabel, cardDetectedLabel, pinNumbersEnterdLabel, attempsLabel, bankImageLabel, textMaakKeuzeLabel, textSaldoBekijkenLabel, textAfbrekenLabel, textAfbrekenLabel2, textGeldOpnemenLabel, textSnelOpnemenLabel, snel70Label, snel100Label, snel150Label, fastMoneyLabel, bankImageLabel2;
-    private JPanel northPanel, centerPanel, westPanel, eastPanel, homescreen, cardDetectedScreen, loggedInScreen, loggedInScreenLeft, loggedInScreenRight, fastMoneyLeft, fastMoneyRight, fastMoney;
+    private JLabel time, labelScanCard, labelWelkom, enterPinLabel, cardDetectedLabel, pinNumbersEnterdLabel, attempsLabel, bankImageLabel, textMaakKeuzeLabel, textSaldoBekijkenLabel, textAfbrekenLabel, textAfbrekenLabel2, textGeldOpnemenLabel, textSnelOpnemenLabel, snel70Label, snel100Label, snel150Label, fastMoneyLabel, bankImageLabel2, bankImageLabel3, checkSaldoLabel, currentSaldoLabel, continueLabel;
+    private JPanel northPanel, centerPanel, westPanel, eastPanel, homescreen, cardDetectedScreen, loggedInScreen, loggedInScreenLeft, loggedInScreenRight, fastMoneyLeft, fastMoneyRight, fastMoney, checkSaldo;
     private JButton backButton;
     private SimpleDateFormat formatter;
     private static ImageIcon bankImage = new ImageIcon("././img/banklogo.png");
@@ -33,6 +34,7 @@ public class GUI {
     private String attempsLeft1 = "U heeft nog ";
     private String attempsLeft2 = " pogingen over";
     private String attempsLeft = "U heeft nog 3 pogingen over";
+    private String saldo = "Hier moet het saldo komen";
 
     private GridBagConstraints gbc = new GridBagConstraints();
     
@@ -99,6 +101,7 @@ public class GUI {
         
         bankImageLabel = new JLabel(bankImage);
         bankImageLabel2 = new JLabel(bankImage);
+        bankImageLabel3 = new JLabel(bankImage);
 
         
         // onderdelen voor het hoofdscherm
@@ -234,6 +237,36 @@ public class GUI {
         fastMoneyLeft.add(Box.createVerticalStrut(300)); // add some vertical space between the labels
         fastMoneyLeft.add(textAfbrekenLabel2);
 
+        //The panels for the saldo check
+        checkSaldoLabel = new JLabel("Dit staat er op uw rekening");
+        checkSaldoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        checkSaldoLabel.setFont(new Font(null, Font.PLAIN, 60));
+
+        continueLabel = new JLabel("Druk op een knop om verder te gaan");
+        continueLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        continueLabel.setFont(new Font(null, Font.PLAIN, 30));
+
+        JPanel bankImagePanel3 = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        bankImagePanel3.setBackground(Color.WHITE);
+        bankImagePanel3.add(bankImageLabel3);
+
+        currentSaldoLabel = new JLabel();
+        currentSaldoLabel.setText(saldo);
+        currentSaldoLabel.setFont(new Font(null, Font.PLAIN, 30));
+        currentSaldoLabel.setVerticalTextPosition(JLabel.BOTTOM);
+        currentSaldoLabel.setHorizontalTextPosition(JLabel.CENTER);
+        currentSaldoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        checkSaldo = new JPanel();
+        checkSaldo.setLayout(new BoxLayout(checkSaldo, BoxLayout.Y_AXIS));
+        checkSaldo.setBackground(Color.white);
+        checkSaldo.add(bankImagePanel3, BorderLayout.NORTH);
+        checkSaldo.add(checkSaldoLabel, BorderLayout.CENTER);
+        checkSaldo.add(Box.createVerticalStrut(100));
+        checkSaldo.add(currentSaldoLabel, BorderLayout.SOUTH);
+        checkSaldo.add(Box.createVerticalStrut(100));
+        checkSaldo.add(continueLabel, BorderLayout.SOUTH);
+       
     }
 
     private void startGui() {
@@ -274,6 +307,12 @@ public class GUI {
         SwingUtilities.updateComponentTreeUI(frame);
     }
 
+    public void setCheckSaldoScreen(){
+        clearScreen();
+        centerPanel.add(checkSaldo);
+        SwingUtilities.updateComponentTreeUI(frame);
+    }
+
     public void setPinNumbersEntered(int totalNumbersEnterd){
         if (totalNumbersEnterd == 0) {
             numbersPinEnterd = "_ - _ - _ - _";
@@ -307,5 +346,9 @@ public class GUI {
 
         String attempsLeft = attempsLeft1 + attempsRemaining + attempsLeft2;
         attempsLabel.setText(attempsLeft);
+    }
+
+    public void retrieveSaldo(){
+        //TO Do make class to return saldo
     }
 }
