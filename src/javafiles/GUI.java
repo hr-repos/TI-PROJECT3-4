@@ -23,8 +23,8 @@ import javax.swing.JLabel;
 
 public class GUI {
     private JFrame frame;
-    private JLabel time, labelScanCard, labelWelkom, enterPinLabel, cardDetectedLabel, pinNumbersEnterdLabel, attempsLabel, bankImageLabel, textMaakKeuzeLabel, textSaldoBekijkenLabel, textAfbrekenLabel, textAfbrekenLabel2, textGeldOpnemenLabel, textSnelOpnemenLabel, snel70Label, snel100Label, snel150Label, fastMoneyLabel, bankImageLabel2, bankImageLabel3, checkSaldoLabel, currentSaldoLabel, continueLabel;
-    private JPanel northPanel, centerPanel, westPanel, eastPanel, homescreen, cardDetectedScreen, loggedInScreen, loggedInScreenLeft, loggedInScreenRight, fastMoneyLeft, fastMoneyRight, fastMoney, checkSaldo;
+    private JLabel time, labelScanCard, labelWelkom, enterPinLabel, cardDetectedLabel, pinNumbersEnterdLabel, attempsLabel, bankImageLabel, textMaakKeuzeLabel, textSaldoBekijkenLabel, textAfbrekenLabel, textAfbrekenLabel2, textGeldOpnemenLabel, textSnelOpnemenLabel, snel70Label, snel100Label, snel150Label, fastMoneyLabel, bankImageLabel2, bankImageLabel3, checkSaldoLabel, currentSaldoLabel, continueLabel, withdrawTextLabel, textAfbrekenLabel3, bankImageLabel4, withdrawContinuLabel, withdrawAmountLabel;
+    private JPanel northPanel, centerPanel, westPanel, eastPanel, homescreen, cardDetectedScreen, loggedInScreen, loggedInScreenLeft, loggedInScreenRight, fastMoneyLeft, fastMoneyRight, fastMoney, checkSaldo, withdrawPanel, withdrawPanelRight, withdrawPanelLeft;
     private JButton backButton;
     private SimpleDateFormat formatter;
     private static ImageIcon bankImage = new ImageIcon("././img/banklogo.png");
@@ -35,11 +35,15 @@ public class GUI {
     private String attempsLeft2 = " pogingen over";
     private String attempsLeft = "U heeft nog 3 pogingen over";
     private String saldo = "Hier moet het saldo komen";
+    private String amount = "€";
 
     private GridBagConstraints gbc = new GridBagConstraints();
     
     public static final int homeScreen = 0;
     public static final int cardScreen = 1;
+    public static final int quickOptionScreen = 2;
+    public static final int checkSaldoScreen = 3;
+    public static final int withdrawScreen = 4;
 
     private int currentScreen = homeScreen;
 
@@ -102,6 +106,7 @@ public class GUI {
         bankImageLabel = new JLabel(bankImage);
         bankImageLabel2 = new JLabel(bankImage);
         bankImageLabel3 = new JLabel(bankImage);
+        bankImageLabel4 = new JLabel(bankImage);
 
         
         // onderdelen voor het hoofdscherm
@@ -267,6 +272,44 @@ public class GUI {
         checkSaldo.add(Box.createVerticalStrut(100));
         checkSaldo.add(continueLabel, BorderLayout.SOUTH);
        
+        //Panels for the withdraw screen
+        JPanel bankImagePanel4 = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        bankImagePanel4.setBackground(Color.WHITE);
+        bankImagePanel4.add(bankImageLabel4);
+        withdrawTextLabel = new JLabel("Hoeveel wilt u pinnen");
+        withdrawTextLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        withdrawTextLabel.setFont(new Font(null, Font.PLAIN, 60));
+
+        withdrawAmountLabel = new JLabel(amount);
+        withdrawAmountLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        withdrawAmountLabel.setFont(new Font(null, Font.PLAIN, 40));
+
+        withdrawPanel = new JPanel();
+        withdrawPanel.setLayout(new BoxLayout(withdrawPanel, BoxLayout.Y_AXIS));
+        withdrawPanel.setBackground(Color.white);
+        withdrawPanel.add(bankImagePanel4);
+        withdrawPanel.add(withdrawTextLabel);
+        withdrawPanel.add(Box.createVerticalStrut(100));
+        withdrawPanel.add(withdrawAmountLabel);
+
+        withdrawContinuLabel = new JLabel("Ga door -->");
+        withdrawContinuLabel.setFont(new Font(null, Font.PLAIN, 40));
+
+        withdrawPanelRight = new JPanel();
+        withdrawPanelRight.setLayout(new BoxLayout(withdrawPanelRight, BoxLayout.Y_AXIS));
+        withdrawPanelRight.setBackground(Color.white);
+        withdrawPanelRight.add(Box.createVerticalStrut(352));
+        withdrawPanelRight.add(withdrawContinuLabel);
+
+        textAfbrekenLabel3 = new JLabel("<-- Afbreken");
+        textAfbrekenLabel3.setFont(new Font(null, Font.PLAIN, 40));
+
+        withdrawPanelLeft = new JPanel();
+        withdrawPanelLeft.setLayout(new BoxLayout(withdrawPanelLeft, BoxLayout.Y_AXIS));
+        withdrawPanelLeft.setBackground(Color.white);
+        withdrawPanelLeft.add(Box.createVerticalStrut(352));
+        withdrawPanelLeft.add(textAfbrekenLabel3);
+
     }
 
     private void startGui() {
@@ -313,6 +356,14 @@ public class GUI {
         SwingUtilities.updateComponentTreeUI(frame);
     }
 
+    public void setWithdrawScreen(){
+        clearScreen();
+        westPanel.add(withdrawPanelLeft);
+        centerPanel.add(withdrawPanel);
+        eastPanel.add(withdrawPanelRight);
+        SwingUtilities.updateComponentTreeUI(frame);
+    }
+
     public void setPinNumbersEntered(int totalNumbersEnterd){
         if (totalNumbersEnterd == 0) {
             numbersPinEnterd = "_ - _ - _ - _";
@@ -350,5 +401,9 @@ public class GUI {
 
     public void retrieveSaldo(){
         //TO Do make class to return saldo
+    }
+
+    public void transactionAmount(){
+        //TO DO make class to show transaction amount
     }
 }
