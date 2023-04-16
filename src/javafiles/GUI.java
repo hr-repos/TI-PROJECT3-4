@@ -17,12 +17,13 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
 import javax.swing.JLabel;
 
 public class GUI {
     private JFrame frame;
-    private JLabel time, labelScanCard, labelWelkom, enterPinLabel, cardDetectedLabel, pinNumbersEnterdLabel, attempsLabel, bankImageLabel, textMaakKeuzeLabel, textSaldoBekijkenLabel, textAfbrekenLabel, textGeldOpnemenLabel, textSnelOpnemenLabel;;
-    private JPanel northPanel, centerPanel, westPanel, eastPanel, homescreen, cardDetectedScreen, loggedInScreen, loggedInScreenLeft, loggedInScreenRight;
+    private JLabel time, labelScanCard, labelWelkom, enterPinLabel, cardDetectedLabel, pinNumbersEnterdLabel, attempsLabel, bankImageLabel, textMaakKeuzeLabel, textSaldoBekijkenLabel, textAfbrekenLabel, textAfbrekenLabel2, textGeldOpnemenLabel, textSnelOpnemenLabel, snel70Label, snel100Label, snel150Label, fastMoneyLabel, bankImageLabel2;
+    private JPanel northPanel, centerPanel, westPanel, eastPanel, homescreen, cardDetectedScreen, loggedInScreen, loggedInScreenLeft, loggedInScreenRight, fastMoneyLeft, fastMoneyRight, fastMoney;
     private JButton backButton;
     private SimpleDateFormat formatter;
     private static ImageIcon bankImage = new ImageIcon("././img/banklogo.png");
@@ -97,6 +98,7 @@ public class GUI {
         time.setForeground(Color.WHITE);
         
         bankImageLabel = new JLabel(bankImage);
+        bankImageLabel2 = new JLabel(bankImage);
 
         
         // onderdelen voor het hoofdscherm
@@ -196,6 +198,41 @@ public class GUI {
         loggedInScreen.add(textMaakKeuzeLabel, BorderLayout.CENTER);
         loggedInScreen.setBackground(Color.white);
 
+        //Set panels for fast Options
+
+        fastMoneyLabel = new JLabel("Hoeveel geld wilt u pinnen?");
+        fastMoneyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        fastMoneyLabel.setFont(new Font(null, Font.PLAIN, 60));
+
+        fastMoney = new JPanel();
+        fastMoney.setLayout(new BorderLayout());
+        fastMoney.setBackground(Color.white);
+        fastMoney.add(bankImageLabel2, BorderLayout.NORTH);
+        fastMoney.add(fastMoneyLabel, BorderLayout.CENTER);
+
+        snel70Label = new JLabel("  70 euro -->");
+        snel70Label.setFont(new Font(null, Font.PLAIN, 40));
+        snel150Label = new JLabel("150 euro -->");
+        snel150Label.setFont(new Font(null, Font.PLAIN, 40));
+
+        fastMoneyRight = new JPanel();
+        fastMoneyRight.setLayout(new BoxLayout(fastMoneyRight, BoxLayout.Y_AXIS));
+        fastMoneyRight.setBackground(Color.white);
+        fastMoneyRight.add(snel70Label);
+        fastMoneyRight.add(Box.createVerticalStrut(300)); // add some vertical space between the labels
+        fastMoneyRight.add(snel150Label);
+
+        snel100Label = new JLabel("<-- 100 euro");
+        snel100Label.setFont(new Font(null, Font.PLAIN, 40));
+        textAfbrekenLabel2 = new JLabel("<-- Afbreken");
+        textAfbrekenLabel2.setFont(new Font(null, Font.PLAIN, 40));
+
+        fastMoneyLeft = new JPanel();
+        fastMoneyLeft.setLayout(new BoxLayout(fastMoneyLeft, BoxLayout.Y_AXIS));
+        fastMoneyLeft.setBackground(Color.white);
+        fastMoneyLeft.add(snel100Label);
+        fastMoneyLeft.add(Box.createVerticalStrut(300)); // add some vertical space between the labels
+        fastMoneyLeft.add(textAfbrekenLabel2);
 
     }
 
@@ -226,6 +263,14 @@ public class GUI {
         westPanel.setAlignmentY(JLabel.CENTER);
         eastPanel.add(loggedInScreenRight);
         eastPanel.setAlignmentY(JLabel.CENTER);
+        SwingUtilities.updateComponentTreeUI(frame);
+    }
+
+    public void setFastMoneyScreen(){
+        clearScreen();
+        centerPanel.add(fastMoney);
+        eastPanel.add(fastMoneyRight);
+        westPanel.add(fastMoneyLeft);
         SwingUtilities.updateComponentTreeUI(frame);
     }
 
