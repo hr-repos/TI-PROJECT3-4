@@ -23,8 +23,8 @@ import javax.swing.JLabel;
 
 public class GUI {
     private JFrame frame;
-    private JLabel time, labelScanCard, labelWelkom, enterPinLabel, cardDetectedLabel, pinNumbersEnterdLabel, attempsLabel, bankImageLabel, textMaakKeuzeLabel, textSaldoBekijkenLabel, textAfbrekenLabel, textAfbrekenLabel2, textGeldOpnemenLabel, textSnelOpnemenLabel, snel70Label, snel100Label, snel150Label, fastMoneyLabel, bankImageLabel2, bankImageLabel3, checkSaldoLabel, currentSaldoLabel, continueLabel, withdrawTextLabel, textAfbrekenLabel3, bankImageLabel4, withdrawContinuLabel, withdrawAmountLabel;
-    private JPanel northPanel, centerPanel, westPanel, eastPanel, homescreen, cardDetectedScreen, loggedInScreen, loggedInScreenLeft, loggedInScreenRight, fastMoneyLeft, fastMoneyRight, fastMoney, checkSaldo, withdrawPanel, withdrawPanelRight, withdrawPanelLeft;
+    private JLabel time, labelScanCard, labelWelkom, enterPinLabel, cardDetectedLabel, pinNumbersEnterdLabel, attempsLabel, bankImageLabel, textMaakKeuzeLabel, textSaldoBekijkenLabel, textAfbrekenLabel, textAfbrekenLabel2, textGeldOpnemenLabel, textSnelOpnemenLabel, snel70Label, snel100Label, snel150Label, fastMoneyLabel, bankImageLabel2, bankImageLabel3, checkSaldoLabel, currentSaldoLabel, continueLabel, withdrawTextLabel, textAfbrekenLabel3, bankImageLabel4, withdrawContinuLabel, withdrawAmountLabel, receiptYesLabel, receiptNoLabel, receiptLabel, bankImageLabel5;
+    private JPanel northPanel, centerPanel, westPanel, eastPanel, homescreen, cardDetectedScreen, loggedInScreen, loggedInScreenLeft, loggedInScreenRight, bankImagePanel5, fastMoneyLeft, fastMoneyRight, fastMoney, checkSaldo, withdrawPanel, withdrawPanelRight, withdrawPanelLeft, receiptPanel, receiptRightPanel, recepitLeftPanel, bankImagePanel4;
     private JButton backButton;
     private SimpleDateFormat formatter;
     private static ImageIcon bankImage = new ImageIcon("././img/banklogo.png");
@@ -107,6 +107,7 @@ public class GUI {
         bankImageLabel2 = new JLabel(bankImage);
         bankImageLabel3 = new JLabel(bankImage);
         bankImageLabel4 = new JLabel(bankImage);
+        bankImageLabel5 = new JLabel(bankImage);
 
         
         // onderdelen voor het hoofdscherm
@@ -273,7 +274,7 @@ public class GUI {
         checkSaldo.add(continueLabel, BorderLayout.SOUTH);
        
         //Panels for the withdraw screen
-        JPanel bankImagePanel4 = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        bankImagePanel4 = new JPanel(new FlowLayout(FlowLayout.CENTER));
         bankImagePanel4.setBackground(Color.WHITE);
         bankImagePanel4.add(bankImageLabel4);
         withdrawTextLabel = new JLabel("Hoeveel wilt u pinnen");
@@ -310,6 +311,37 @@ public class GUI {
         withdrawPanelLeft.add(Box.createVerticalStrut(352));
         withdrawPanelLeft.add(textAfbrekenLabel3);
 
+        receiptLabel = new JLabel("Wilt u een bon hebben?");
+        receiptLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        receiptLabel.setFont(new Font(null, Font.PLAIN, 60));
+
+        bankImagePanel5 = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        bankImagePanel5.setBackground(Color.WHITE);
+        bankImagePanel5.add(bankImageLabel5);
+
+        receiptPanel = new JPanel();
+        receiptPanel.setLayout(new BoxLayout(receiptPanel, BoxLayout.Y_AXIS));
+        receiptPanel.setBackground(Color.white);
+        receiptPanel.add(bankImagePanel5);
+        receiptPanel.add(receiptLabel);
+
+        receiptNoLabel = new JLabel("<-- Nee");
+        receiptNoLabel.setFont(new Font(null, Font.PLAIN, 40));
+
+        receiptYesLabel = new JLabel("   Ja -->");
+        receiptYesLabel.setFont(new Font(null, Font.PLAIN, 40));
+
+        receiptRightPanel = new JPanel();
+        receiptRightPanel.setLayout(new BoxLayout(receiptRightPanel, BoxLayout.Y_AXIS));
+        receiptRightPanel.setBackground(Color.white);
+        receiptRightPanel.add(Box.createVerticalStrut(352));
+        receiptRightPanel.add(receiptYesLabel);
+
+        recepitLeftPanel = new JPanel();
+        recepitLeftPanel.setLayout(new BoxLayout(recepitLeftPanel, BoxLayout.Y_AXIS));
+        recepitLeftPanel.setBackground(Color.white);
+        recepitLeftPanel.add(Box.createVerticalStrut(352));
+        recepitLeftPanel.add(receiptNoLabel);
     }
 
     private void startGui() {
@@ -361,6 +393,14 @@ public class GUI {
         westPanel.add(withdrawPanelLeft);
         centerPanel.add(withdrawPanel);
         eastPanel.add(withdrawPanelRight);
+        SwingUtilities.updateComponentTreeUI(frame);
+    }
+
+    public void setReceiptScreen(){
+        clearScreen();
+        centerPanel.add(receiptPanel);
+        eastPanel.add(receiptRightPanel);
+        westPanel.add(recepitLeftPanel);
         SwingUtilities.updateComponentTreeUI(frame);
     }
 
