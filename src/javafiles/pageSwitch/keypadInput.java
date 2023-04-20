@@ -95,7 +95,7 @@ public void currentScreenOne(String inputLine) {
       }   
   } else if (inputLine.equals("correct")) {
     //hier kan het volgende scherm
-      SwingUtilities.invokeLater(() -> scherm.setCardDetectedScreen());
+      SwingUtilities.invokeLater(() -> scherm.setLoggedInScreen());
   }
 }
 

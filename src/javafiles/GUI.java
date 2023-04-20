@@ -33,7 +33,7 @@ public class GUI {
     private String numbersPinEnterd = "_ - _ - _ - _";
     private String attempsLeft1 = "U heeft nog ";
     private String attempsLeft2 = " pogingen over";
-    private String attempsLeft = "U heeft nog 3 pogingen over";
+    private String attempsLeft = " ";
     private String saldo = "Hier moet het saldo komen";
     private String amount = "€";
 
