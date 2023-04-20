@@ -35,7 +35,7 @@ public class GUI {
     private String attempsLeft2 = " pogingen over";
     private String attempsLeft = " ";
     private String saldo = "Hier moet het saldo komen";
-    private String amount = "€";
+    private String amount = "€ ";
 
     private GridBagConstraints gbc = new GridBagConstraints();
     
@@ -291,6 +291,7 @@ public class GUI {
         withdrawAmountLabel = new JLabel(amount);
         withdrawAmountLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         withdrawAmountLabel.setFont(new Font(null, Font.PLAIN, 40));
+        
 
         withdrawPanel = new JPanel();
         withdrawPanel.setLayout(new BoxLayout(withdrawPanel, BoxLayout.Y_AXIS));
@@ -391,6 +392,7 @@ public class GUI {
 
     public void setLoggedInScreen(){
         clearScreen();
+        amount = "€ ";
         centerPanel.add(loggedInScreen);
         westPanel.add(loggedInScreenLeft, gbc);
         westPanel.setAlignmentY(JLabel.CENTER);
@@ -417,7 +419,8 @@ public class GUI {
     }
 
     public void setWithdrawScreen(){
-        clearScreen();
+        withdrawAmountLabel.setText(amount);
+        clearScreen(); 
         westPanel.add(withdrawPanelLeft);
         centerPanel.add(withdrawPanel);
         eastPanel.add(withdrawPanelRight);
@@ -475,7 +478,12 @@ public class GUI {
         //TO Do make class to return saldo
     }
 
-    public void transactionAmount(){
-        //TO DO make class to show transaction amount
+    public void transactionAmount(String amountInput) {
+        amount += amountInput;
+        
+        withdrawAmountLabel.setText(amount);
     }
+    
+    
+       
 }

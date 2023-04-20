@@ -154,6 +154,10 @@ public void currentScreenFive(String inputLine){
     }
     else if (inputLine.equals("b")){
         SwingUtilities.invokeLater(() -> scherm.setLoggedInScreen());
+    } else if (inputLine.matches("[0-9]")) {
+        scherm.transactionAmount(inputLine);
+        System.out.println("i made it");
+        SwingUtilities.invokeLater(() -> scherm.setWithdrawScreen());
     }
 }
 
@@ -163,8 +167,10 @@ public void currentScreenSix(String inputLine){
     }
     else if (inputLine.equals("d")){
         SwingUtilities.invokeLater(() -> scherm.setGoodbyeScreen());
-    }
+    } 
+    
 }
+
 
 public void currentScreenSeven(String inputLine){
     if (inputLine != null){
