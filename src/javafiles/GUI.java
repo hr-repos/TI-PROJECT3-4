@@ -57,7 +57,10 @@ public class GUI {
 
     public boolean isCurrentScreen(int screen) {
         // Check if the current screen matches the specified screen
-        return currentScreen == screen;
+        if (currentScreen == screen){
+            return true;
+        }
+        return false;
     }
 
     private void clearScreen(){

@@ -41,10 +41,10 @@ public class keypadInput {
                 //checks what screen is currently visible
                 if (scherm.isCurrentScreen(0)) {
                     currentScreenZero(inputLine);
-                    continue;
+                    
                 } else if (scherm.isCurrentScreen(1)) {
                     currentScreenOne(inputLine);
-                    continue;
+                    
                 }
                 else {}
             }
