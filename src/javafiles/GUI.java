@@ -441,29 +441,24 @@ public class GUI {
     public void setPinNumbersEntered(int totalNumbersEnterd){
         if (totalNumbersEnterd == 0) {
             numbersPinEnterd = "_ - _ - _ - _";
-            pinNumbersEnterdLabel.setText(numbersPinEnterd);
         }
         else if (totalNumbersEnterd == 1) {
             numbersPinEnterd = "X - _ - _ - _";
-            pinNumbersEnterdLabel.setText(numbersPinEnterd);
         }
         else if (totalNumbersEnterd == 2) {
             numbersPinEnterd = "X - X - _ - _";
-            pinNumbersEnterdLabel.setText(numbersPinEnterd);
         }
         else if (totalNumbersEnterd == 3) {
             numbersPinEnterd = "X - X - X - _";
-            pinNumbersEnterdLabel.setText(numbersPinEnterd);
         }
         else if (totalNumbersEnterd == 4) {
             numbersPinEnterd = "X - X - X - X";
-            pinNumbersEnterdLabel.setText(numbersPinEnterd);
         }
         else {
             System.out.println("ERROR: Aantal ingetoetste getallen moet vallen binnen 0 t/m 4");
             System.out.println("No changes were made!");
-
         }
+        pinNumbersEnterdLabel.setText(numbersPinEnterd);
     }
 
     public void attempsLeft(int attemps){
