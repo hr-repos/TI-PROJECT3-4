@@ -1,16 +1,11 @@
 const express = require('express');
-const {createPool} = require('mysql')
 const app = express();
 const PORT = 9999
+const dotenv = require('dotenv');
+dotenv.config();
 
 // Betere methode gevonden: https://youtu.be/vrj9AohVhPA?t=1457
-const pool = createPool({
-    host: "145.24.222.188",
-    port: "",
-    user: "",
-    password: "",
-    connectionLimit: 10
-})
+const dbService = require('./dbService');
 
 app.use(express.json())
 
@@ -53,4 +48,9 @@ app.get('/testdb', (req, res) => {
     pool.query(`select ID, IBAN from bank.test`, (err, res) => {
         return console.log(res)
     })
+});
+
+app.get('/readDB', (req, res) => {
+    const db = dbService.getDbServiceInstance();
+    const result = db.getAllData();
 });
