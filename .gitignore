@@ -2,3 +2,4 @@
 /.vscode
 /.vs
 /src/nodejsfiles/node_modules
+*.env
