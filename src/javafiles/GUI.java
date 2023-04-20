@@ -23,8 +23,8 @@ import javax.swing.JLabel;
 
 public class GUI {
     private JFrame frame;
-    private JLabel time, labelScanCard, labelWelkom, enterPinLabel, cardDetectedLabel, pinNumbersEnterdLabel, attempsLabel, bankImageLabel, textMaakKeuzeLabel, textSaldoBekijkenLabel, textAfbrekenLabel, textAfbrekenLabel2, textGeldOpnemenLabel, textSnelOpnemenLabel, snel70Label, snel100Label, snel150Label, fastMoneyLabel, bankImageLabel2, bankImageLabel3, checkSaldoLabel, currentSaldoLabel, continueLabel, withdrawTextLabel, textAfbrekenLabel3, bankImageLabel4, withdrawContinuLabel, withdrawAmountLabel, receiptYesLabel, receiptNoLabel, receiptLabel, bankImageLabel5;
-    private JPanel northPanel, centerPanel, westPanel, eastPanel, homescreen, cardDetectedScreen, loggedInScreen, loggedInScreenLeft, loggedInScreenRight, bankImagePanel5, fastMoneyLeft, fastMoneyRight, fastMoney, checkSaldo, withdrawPanel, withdrawPanelRight, withdrawPanelLeft, receiptPanel, receiptRightPanel, recepitLeftPanel, bankImagePanel4;
+    private JLabel time, labelScanCard, labelWelkom, enterPinLabel, cardDetectedLabel, pinNumbersEnterdLabel, attempsLabel, bankImageLabel, textMaakKeuzeLabel, textSaldoBekijkenLabel, textAfbrekenLabel, textAfbrekenLabel2, textGeldOpnemenLabel, textSnelOpnemenLabel, snel70Label, snel100Label, snel150Label, fastMoneyLabel, bankImageLabel2, bankImageLabel3, checkSaldoLabel, currentSaldoLabel, continueLabel, withdrawTextLabel, textAfbrekenLabel3, bankImageLabel4, withdrawContinuLabel, withdrawAmountLabel, receiptYesLabel, receiptNoLabel, receiptLabel, bankImageLabel5, goodbyeLabel, bankImageLabel6;
+    private JPanel northPanel, centerPanel, westPanel, eastPanel, homescreen, cardDetectedScreen, loggedInScreen, loggedInScreenLeft, loggedInScreenRight, bankImagePanel6, bankImagePanel5, fastMoneyLeft, fastMoneyRight, fastMoney, checkSaldo, withdrawPanel, withdrawPanelRight, withdrawPanelLeft, receiptPanel, receiptRightPanel, receiptLeftPanel, bankImagePanel4, goodbyePanel;
     private JButton backButton;
     private SimpleDateFormat formatter;
     private static ImageIcon bankImage = new ImageIcon("././img/banklogo.png");
@@ -41,9 +41,12 @@ public class GUI {
     
     public static final int homeScreen = 0;
     public static final int cardScreen = 1;
-    public static final int quickOptionScreen = 2;
-    public static final int checkSaldoScreen = 3;
-    public static final int withdrawScreen = 4;
+    public static final int loggedinScreen = 2;
+    public static final int quickOptionScreen = 3;
+    public static final int checkSaldoScreen = 4;
+    public static final int withdrawScreen = 5;
+    public static final int receiptScreen = 6;
+    public static final int goodbyeScreen = 7;
 
     private int currentScreen = homeScreen;
 
@@ -108,6 +111,7 @@ public class GUI {
         bankImageLabel3 = new JLabel(bankImage);
         bankImageLabel4 = new JLabel(bankImage);
         bankImageLabel5 = new JLabel(bankImage);
+        bankImageLabel6 = new JLabel(bankImage);
 
         
         // onderdelen voor het hoofdscherm
@@ -337,11 +341,27 @@ public class GUI {
         receiptRightPanel.add(Box.createVerticalStrut(352));
         receiptRightPanel.add(receiptYesLabel);
 
-        recepitLeftPanel = new JPanel();
-        recepitLeftPanel.setLayout(new BoxLayout(recepitLeftPanel, BoxLayout.Y_AXIS));
-        recepitLeftPanel.setBackground(Color.white);
-        recepitLeftPanel.add(Box.createVerticalStrut(352));
-        recepitLeftPanel.add(receiptNoLabel);
+        receiptLeftPanel = new JPanel();
+        receiptLeftPanel.setLayout(new BoxLayout(receiptLeftPanel, BoxLayout.Y_AXIS));
+        receiptLeftPanel.setBackground(Color.white);
+        receiptLeftPanel.add(Box.createVerticalStrut(352));
+        receiptLeftPanel.add(receiptNoLabel);
+
+        bankImagePanel6 = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        bankImagePanel6.setBackground(Color.WHITE);
+        bankImagePanel6.add(bankImageLabel6);
+
+        goodbyeLabel = new JLabel("Vaarwel en tot ziens");
+        goodbyeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        goodbyeLabel.setFont(new Font(null, Font.PLAIN, 60));
+
+
+        goodbyePanel = new JPanel();
+        goodbyePanel.setLayout(new BoxLayout(goodbyePanel, BoxLayout.Y_AXIS));
+        goodbyePanel.setBackground(Color.white);
+        goodbyePanel.add(bankImagePanel6);
+        goodbyePanel.add(goodbyeLabel);
+
     }
 
     private void startGui() {
@@ -355,12 +375,14 @@ public class GUI {
     public void setHomeScreen() {
         clearScreen();
         centerPanel.add(homescreen);
+        switchToScreen(0);
         SwingUtilities.updateComponentTreeUI(frame);
     }
 
     public void setCardDetectedScreen() {
         clearScreen();
         centerPanel.add(cardDetectedScreen);
+        switchToScreen(1);
         SwingUtilities.updateComponentTreeUI(frame);
     }
 
@@ -371,6 +393,7 @@ public class GUI {
         westPanel.setAlignmentY(JLabel.CENTER);
         eastPanel.add(loggedInScreenRight);
         eastPanel.setAlignmentY(JLabel.CENTER);
+        switchToScreen(2);
         SwingUtilities.updateComponentTreeUI(frame);
     }
 
@@ -379,12 +402,14 @@ public class GUI {
         centerPanel.add(fastMoney);
         eastPanel.add(fastMoneyRight);
         westPanel.add(fastMoneyLeft);
+        switchToScreen(3);
         SwingUtilities.updateComponentTreeUI(frame);
     }
 
     public void setCheckSaldoScreen(){
         clearScreen();
         centerPanel.add(checkSaldo);
+        switchToScreen(4);
         SwingUtilities.updateComponentTreeUI(frame);
     }
 
@@ -393,6 +418,7 @@ public class GUI {
         westPanel.add(withdrawPanelLeft);
         centerPanel.add(withdrawPanel);
         eastPanel.add(withdrawPanelRight);
+        switchToScreen(5);
         SwingUtilities.updateComponentTreeUI(frame);
     }
 
@@ -400,7 +426,15 @@ public class GUI {
         clearScreen();
         centerPanel.add(receiptPanel);
         eastPanel.add(receiptRightPanel);
-        westPanel.add(recepitLeftPanel);
+        westPanel.add(receiptLeftPanel);
+        switchToScreen(6);
+        SwingUtilities.updateComponentTreeUI(frame);
+    }
+
+    public void setGoodbyeScreen(){
+        clearScreen();
+        centerPanel.add(goodbyePanel);
+        switchToScreen(7);
         SwingUtilities.updateComponentTreeUI(frame);
     }
 
