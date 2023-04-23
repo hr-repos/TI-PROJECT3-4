@@ -46,7 +46,7 @@ class KeypadHandler {
       memset(code, 0, sizeof(code)); // initialize code array to all zeros
     }
 
-    void readKeypad() {
+    void readKeypad1() {
       char key = keypad.getKey();
 
 // Check if a numeric key was pressed
@@ -115,13 +115,27 @@ void cardScanner(){// Look for new cards
   char buttonPress[] = "pass found";
   Serial.println(buttonPress); // sends a \n with text
   while(passwordIsTrue){
-      keypadHandler.readKeypad();
+      keypadHandler.readKeypad1();
     }
   while(shoppingAtATM){
     buttonPressed();
-    delay(500);
+    
+
     }
   }
+
+ void readKeypadNumber() {
+  char key;
+
+    key = keypad.getKey();
+    if (key) {
+      if (key >= '0' && key <= '9') {
+        Serial.println(key);
+        delay(500);
+    } else{};
+  }
+}
+
 
   void buttonPressed(){
   buttonState1 = digitalRead(button1);
@@ -132,21 +146,26 @@ void cardScanner(){// Look for new cards
       if (buttonState1 == LOW){
         char buttonPress[] = "a";
         Serial.println(buttonPress); // sends a \n with text
+        delay(500);
         }
       else if(buttonState2 ==  LOW){
         char buttonPress[] = "b";
         Serial.println(buttonPress); // sends a \n with text
+        delay(500);
         }
       else if(buttonState3 ==  LOW){
         char buttonPress[] = "c";
         Serial.println(buttonPress); // sends a \n with text
+        delay(500);
         }
       else if(buttonState4 ==  LOW){
         char buttonPress[] = "d";
         Serial.println(buttonPress); // sends a \n with text
+        delay(500);
         }
       else {
-        
-        }
+        readKeypadNumber();
+    }
   }
+
  

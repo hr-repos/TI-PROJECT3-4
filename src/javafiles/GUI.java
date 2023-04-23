@@ -36,6 +36,7 @@ public class GUI {
     private String attempsLeft = " ";
     private String saldo = "Hier moet het saldo komen";
     private String amount = "€ ";
+    private String amount2 = "€ ";
     private String amountString = "";
 
     private GridBagConstraints gbc = new GridBagConstraints();
@@ -394,6 +395,7 @@ public class GUI {
     public void setLoggedInScreen(){
         clearScreen();
         amount = "€ ";
+        amountString = "";
         centerPanel.add(loggedInScreen);
         westPanel.add(loggedInScreenLeft, gbc);
         westPanel.setAlignmentY(JLabel.CENTER);
@@ -485,6 +487,7 @@ public class GUI {
             double amountDouble = Double.parseDouble(amountString);
             amountDouble /= 100.0;
             amount = String.format("%.2f", amountDouble); // Format the amount to 2 decimal places
+
             withdrawAmountLabel.setText(amount); // Include the € symbol in the label
         } catch (NumberFormatException e) {
             // Handle invalid input
