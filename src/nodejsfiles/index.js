@@ -87,6 +87,10 @@ app.post('/withdraw' ,(req, res) => {
             res.status(r.wrongpin.code).send(r.wrongpin.message);
             return;
         } 
+        else if (response == "NOWBLOCKED"){
+            res.status(r.nowblocked.code).send(r.nowblocked.message);
+            return;
+        } 
         else if (response == "BROKE"){
             res.status(r.broke.code).send(r.broke.message);
             return;

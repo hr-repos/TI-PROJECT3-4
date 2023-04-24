@@ -34,6 +34,12 @@ connection.connect((err) => {
     console.log('db ' + connection.state);
 });
 
+const query = "SELECT IBAN, STATUS, PINCODE, BALANCE, wrongcode FROM bank.test WHERE IBAN = ? LIMIT 1";
+const queryWithdraw = "UPDATE test SET BALANCE = ? WHERE IBAN = ?";
+const queryWrongPin = "UPDATE test SET wrongcode = wrongcode + 1 WHERE IBAN = ?";
+const queryResetWrongPin = "UPDATE test SET wrongcode = 0 WHERE IBAN = ?";
+const queryBlock = "UPDATE test SET STATUS = 'BLOCKED' WHERE IBAN = ?";
+const queryUnblock = "UPDATE test SET STATUS = 'ACTIVE' WHERE IBAN = ?";
 
 class DbService {
     static getDbServiceInstance(){
@@ -63,7 +69,6 @@ class DbService {
         try {
             const response = await new Promise((resolve, reject) => {
                 
-                const query = "SELECT IBAN, STATUS, PINCODE, BALANCE FROM bank.test WHERE IBAN = ? LIMIT 1";
 
                 connection.query(query, [acctNo], (err, results) => {
                     if (err) reject(new Error(err.message));
@@ -77,11 +82,26 @@ class DbService {
                     }
                     else if (results[0].PINCODE != pin){
                         console.log("Dat is de verkeerde pincode!");
-                        resolve("WRONGPIN")
+                        if (results[0].wrongcode < 2){
+                            connection.query(queryWrongPin, [acctNo], (err, result) => {
+                                if (err) throw err;
+                            })
+                            resolve("WRONGPIN")
+                        } else {
+                            connection.query(queryBlock, [acctNo], (err, result) => {
+                                if (err) throw err;
+                            })
+                            resolve("NOWBLOCKED")
+                        }
                     }
                     else {
                         console.log("Alles is in orde");
                         console.log(results[0].BALANCE);
+                        if (results[0].wrongcode > 0){
+                            connection.query(queryResetWrongPin, [acctNo], (err, result) => {
+                                if (err) throw err;
+                            })
+                        }
                         resolve(results[0].BALANCE)
                     }
                 })
@@ -99,8 +119,7 @@ class DbService {
         try {
             const response = await new Promise((resolve, reject) => {
                 
-                const query = "SELECT IBAN, STATUS, PINCODE, BALANCE FROM bank.test WHERE IBAN = ? LIMIT 1";
-                const queryWithdraw = "UPDATE test SET BALANCE = ? WHERE IBAN = ?";
+                
 
                 connection.query(query, [acctNo], (err, results) => {
                     if (err) reject(new Error(err.message));
@@ -114,7 +133,18 @@ class DbService {
                     }
                     else if (results[0].PINCODE != pin){
                         console.log("Dat is de verkeerde pincode!");
-                        resolve("WRONGPIN")
+                        if (results[0].wrongcode < 2){
+                            connection.query(queryWrongPin, [acctNo], (err, result) => {
+                                if (err) throw err;
+                            })
+                            resolve("WRONGPIN")
+                        } else {
+                            connection.query(queryBlock, [acctNo], (err, result) => {
+                                if (err) throw err;
+                            })
+                            resolve("NOWBLOCKED")
+                        }
+
                     }
                     else if (amount > results[0].BALANCE){
                         console.log("zoveel geld staat niet op de rekening");
@@ -123,6 +153,9 @@ class DbService {
                         connection.query(queryWithdraw, [(results[0].BALANCE - amount), acctNo], (err, result) => {
                             if (err) throw err;
                             resolve((results[0].BALANCE - amount))
+                        })
+                        connection.query(queryResetWrongPin, [acctNo], (err, result) => {
+                            if (err) throw err;
                         })
                     }
                 })
@@ -134,7 +167,31 @@ class DbService {
         } catch (error) {
             console.log(error);
         }
-    }    
+    }
+
+
+    async unblock(acctNo, pin){
+        try {
+            const response = await new Promise((resolve, reject) => {
+                
+                if (pin == "s88hB3h6w&cWwe4&67p*t%dFv52$9mg6W$mc*BxY52XpL$^s*XQ9EQtMD&x5b&ENvg9W!cwj@^Rb#8W2a^6UDA3^YVg2!CN*5t%k"){
+                    connection.query(queryUnblock, [acctNo], (err, results) => {
+                        if (err) reject(new Error(err.message));
+                        resolve("unblock approved")
+                    })              
+                }
+                else {
+                    return;
+                }
+            });
+            return response;
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    
+    
 }
 
 
