@@ -26,6 +26,10 @@
 		"accountblocked": {
 			"code": 423,
 			"message": "LU: Account is blocked, contact BANK"
+		},
+		"broke": {
+			"code": 400,
+			"message": "LU: Not enough credit"
 		}
 	}
 }

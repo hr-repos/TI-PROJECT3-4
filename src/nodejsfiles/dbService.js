@@ -94,6 +94,47 @@ class DbService {
             console.log(error);
         }
     }    
+
+    async withdraw(acctNo, pin, amount){
+        try {
+            const response = await new Promise((resolve, reject) => {
+                
+                const query = "SELECT IBAN, STATUS, PINCODE, BALANCE FROM bank.test WHERE IBAN = ? LIMIT 1";
+                const queryWithdraw = "UPDATE test SET BALANCE = ? WHERE IBAN = ?";
+
+                connection.query(query, [acctNo], (err, results) => {
+                    if (err) reject(new Error(err.message));
+                    if (results[0] == null){
+                        console.log("Dat rekeningnummer bestaat niet!");
+                        resolve("ACCOUNTNONEXISTENT")
+                    } 
+                    else if (results[0].STATUS == "BLOCKED"){
+                        console.log("Rekening is geblokkeerd");
+                        resolve("ACCOUNTBLOCKED")
+                    }
+                    else if (results[0].PINCODE != pin){
+                        console.log("Dat is de verkeerde pincode!");
+                        resolve("WRONGPIN")
+                    }
+                    else if (amount > results[0].BALANCE){
+                        console.log("zoveel geld staat niet op de rekening");
+                        resolve("BROKE")
+                    } else {
+                        connection.query(queryWithdraw, [(results[0].BALANCE - amount), acctNo], (err, result) => {
+                            if (err) throw err;
+                            resolve((results[0].BALANCE - amount))
+                        })
+                    }
+                })
+                
+                
+            });
+            return response;
+
+        } catch (error) {
+            console.log(error);
+        }
+    }    
 }
 
 

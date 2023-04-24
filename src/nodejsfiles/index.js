@@ -65,7 +65,52 @@ app.post('/balance' ,(req, res) => {
 });
 
 app.post('/withdraw' ,(req, res) => {
+    if (!req.is('application/json')){
+        console.log(r.expectedJSONError.message + wysd.sanityCheck)
+        res.status(r.expectedJSONError.code).send(r.expectedJSONError.message);
+        return;
+    }    
+    const db = dbService.getDbServiceInstance();
+    const result = db.withdraw(req.body.body.acctNo, req.body.body.pin, req.body.body.amount);
 
+    result
+    .then(response => {
+        if (response == "ACCOUNTNONEXISTENT"){
+            res.status(r.accountnonexistent.code).send(r.accountnonexistent.message);
+            return;
+        } 
+        else if (response == "ACCOUNTBLOCKED"){
+            res.status(r.accountblocked.code).send(r.accountblocked.message);
+            return;
+        } 
+        else if (response == "WRONGPIN"){
+            res.status(r.wrongpin.code).send(r.wrongpin.message);
+            return;
+        } 
+        else if (response == "BROKE"){
+            res.status(r.broke.code).send(r.broke.message);
+            return;
+        }
+        else {
+            const retObj = JSON.stringify({
+                'head': {
+                    'fromCtry': country,
+                    'fromBank': bank,
+                    'toCtry': req.body.head.fromCtry,
+                    'toBank': req.body.head.fromBank
+                },
+                'body': {
+                    'succes': true,
+                    'acctNo': req.body.body.acctNo,
+                    'balance': response
+                }
+            });
+            res.status(200).json(retObj);
+        }
+    })
+    .catch((error) => {
+        res.status(r.somethingHappened.code).send(r.somethingHappened.message);
+    })
 
 });
 
