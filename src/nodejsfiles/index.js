@@ -12,8 +12,6 @@ dotenv.config();
 const dbService = require('./dbService');
 
 app.use(express.json())
-
-
  
 app.listen (
     PORT,
@@ -61,6 +59,7 @@ app.post('/balance' ,(req, res) => {
     })
     .catch((error) => {
         res.status(r.somethingHappened.code).send(r.somethingHappened.message);
+        console.log(error);
     })
 });
 
@@ -114,12 +113,10 @@ app.post('/withdraw' ,(req, res) => {
     })
     .catch((error) => {
         res.status(r.somethingHappened.code).send(r.somethingHappened.message);
+        console.log(error);
     })
 
 });
-
-
-
 
 // testfuncties hieronder
 // Probeer uit met localhost:9999/testpin/1234
@@ -134,10 +131,8 @@ app.get('/testpin/:password', (req, res) => {
     }
 });
 
-// Print alle rijen en laat de kolommen ID en IBAN zien uit de database
-
-
+// Print alle rijen en laat de kolommen ID en IBAN zien uit de database in de console
 app.get('/readDB', (req, res) => {
-    const db = dbService.getDbServiceInstance();
-    const result = db.getAllData();
+    const db = dbService.getDbServiceInstance(); 
+    console.log(db.getAllData());
 });

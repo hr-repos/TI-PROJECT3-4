@@ -56,9 +56,6 @@ class DbService {
                     resolve(results);
                 })
             });
-
-            console.log(response);
-
         } catch (error) {
             console.log(error);
         }
