@@ -14,6 +14,13 @@ public class BankApiCommunication {
         this.bankLand = bankLand;
     }
 
+    // controleerd of het rekeningnummer van onze bank is en returnt true of false
+    private boolean checkIfLocalAccount(String acctNo){
+        int offset = Math.min(9, acctNo.length());
+        String text = acctNo.substring(0, offset);
+        return text.equals("LUX01BANK");
+    }
+
     // true goedgekeurd, // false niet goedgekeurd
     boolean withdraw(String acctNo, String pin, int bedrag ) {
         return true;
