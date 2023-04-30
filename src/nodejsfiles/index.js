@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const PORT = 9999
+const PORT = 8443
 const country = "LU"
 const bank = "BANK"
 const dotenv = require('dotenv');
@@ -108,7 +108,7 @@ app.post('/withdraw' ,(req, res) => {
                     'balance': response
                 }
             });
-            res.status(200).json(retObj);
+            res.status(200).send(retObj);
         }
     })
     .catch((error) => {
