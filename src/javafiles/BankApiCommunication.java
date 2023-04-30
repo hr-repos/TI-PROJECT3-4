@@ -1,9 +1,17 @@
 
 package javafiles;
 
+import java.awt.geom.RoundRectangle2D.Float;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 // binnen deze class gebeurt de communicatie met de api
 
@@ -12,9 +20,11 @@ public class BankApiCommunication {
     private String fromCtry;
     private String fromBank;
 
-    private Gson gson = new GsonBuilder()
+    private Gson gsonPretty = new GsonBuilder()
     .setPrettyPrinting()
     .create();
+
+    private Gson gson = new Gson();
     
     public BankApiCommunication(String fromCtry, String fromBank){
         this.fromBank = fromBank;
@@ -34,17 +44,21 @@ public class BankApiCommunication {
 
     }
 
-    
-
-
     // return het bedrag dat op de rekening staat
-    public int getBalance(String acctNo, String pin){
-        
-        return 100;
+    public Double getBalance(String toCtry, String toBank, String acctNo, String pin){
+        try {
+            String apiResponse = postApiRequest(jsonBalancePacket(toCtry, toBank, acctNo, pin));
+            JsonObject jsonObject = gson.fromJson(apiResponse, JsonObject.class);
+            // System.out.println(jsonObject);
 
+            return jsonObject.getAsJsonObject("body").get("balance").getAsDouble();
+        } catch (Exception e) {
+            System.out.println(e);
+            return -1.0;
+        }
     }
 
-    public String jsonBalancePacket(String toCtry, String toBank, String acctNo, String pin){
+    private String jsonBalancePacket(String toCtry, String toBank, String acctNo, String pin){
         JsonObject payload = new JsonObject();
         JsonObject head = new JsonObject();
         JsonObject body = new JsonObject();
@@ -60,10 +74,10 @@ public class BankApiCommunication {
         payload.add("head", head);
         payload.add("body", body);
 
-        return gson.toJson(payload);
+        return gsonPretty.toJson(payload);
     }
 
-    public String jsonWithdrawPacket(String toCtry, String toBank, String acctNo, String pin, int amount){
+    private String jsonWithdrawPacket(String toCtry, String toBank, String acctNo, String pin, int amount){
         String fromCtry = "LU";
         String fromBank = "BK";
 
@@ -84,6 +98,39 @@ public class BankApiCommunication {
         payload.add("body", body);
 
         return gson.toJson(payload);
+    }
+
+    private String postApiRequest(String payload){
+        try {
+
+            URL url = new URL("http://localhost:9999/balance");
+            
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+            
+            // send json payload
+            try (DataOutputStream dos = new DataOutputStream(conn.getOutputStream())) {
+                dos.writeBytes(payload);
+            }
+            
+            // Read Response from API
+            try (BufferedReader bf = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+                String line;
+                while ((line = bf.readLine()) != null) {
+                    System.out.println(line);
+                    return line;
+                }
+                return "";
+                
+            }
+        } catch (Exception e) {
+            System.out.println("error in function postApiRequest");
+            System.out.println(e);
+            return "";
+        }
     }
 
 
