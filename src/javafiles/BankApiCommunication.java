@@ -9,16 +9,16 @@ import com.google.gson.JsonObject;
 
 
 public class BankApiCommunication {
-    private String bankLand;
-    private String bankCode;
+    private String fromCtry;
+    private String fromBank;
 
-    Gson gson = new GsonBuilder()
+    private Gson gson = new GsonBuilder()
     .setPrettyPrinting()
     .create();
     
-    public BankApiCommunication(String bankCode, String bankLand){
-        this.bankCode = bankCode;
-        this.bankLand = bankLand;
+    public BankApiCommunication(String fromCtry, String fromBank){
+        this.fromBank = fromBank;
+        this.fromCtry = fromCtry;
     }
 
     // controleerd of het rekeningnummer van onze bank is en returnt true of false
@@ -45,9 +45,6 @@ public class BankApiCommunication {
     }
 
     public String jsonBalancePacket(String toCtry, String toBank, String acctNo, String pin){
-        String fromCtry = "LU";
-        String fromBank = "BK";
-
         JsonObject payload = new JsonObject();
         JsonObject head = new JsonObject();
         JsonObject body = new JsonObject();
