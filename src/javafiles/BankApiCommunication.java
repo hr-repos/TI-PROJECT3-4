@@ -1,6 +1,10 @@
 
 package javafiles;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+
 // binnen deze class gebeurt de communicatie met de api
 
 
@@ -8,7 +12,10 @@ public class BankApiCommunication {
     private String bankLand;
     private String bankCode;
 
-
+    Gson gson = new GsonBuilder()
+    .setPrettyPrinting()
+    .create();
+    
     public BankApiCommunication(String bankCode, String bankLand){
         this.bankCode = bankCode;
         this.bankLand = bankLand;
@@ -36,6 +43,53 @@ public class BankApiCommunication {
         return 100;
 
     }
+
+    public String jsonBalancePacket(String toCtry, String toBank, String acctNo, String pin){
+        String fromCtry = "LU";
+        String fromBank = "BK";
+
+        JsonObject payload = new JsonObject();
+        JsonObject head = new JsonObject();
+        JsonObject body = new JsonObject();
+
+        head.addProperty("fromCtry", fromCtry);
+        head.addProperty("fromBank", fromBank);
+        head.addProperty("toCtry", toCtry);
+        head.addProperty("toBank", toBank);
+
+        body.addProperty("acctNo", acctNo);
+        body.addProperty("pin", pin);
+        
+        payload.add("head", head);
+        payload.add("body", body);
+
+        return gson.toJson(payload);
+    }
+
+    public String jsonWithdrawPacket(String toCtry, String toBank, String acctNo, String pin, int amount){
+        String fromCtry = "LU";
+        String fromBank = "BK";
+
+        JsonObject payload = new JsonObject();
+        JsonObject head = new JsonObject();
+        JsonObject body = new JsonObject();
+
+        head.addProperty("fromCtry", fromCtry);
+        head.addProperty("fromBank", fromBank);
+        head.addProperty("toCtry", toCtry);
+        head.addProperty("toBank", toBank);
+
+        body.addProperty("acctNo", acctNo);
+        body.addProperty("pin", pin);
+        body.addProperty("amount", amount);
+        
+        payload.add("head", head);
+        payload.add("body", body);
+
+        return gson.toJson(payload);
+    }
+
+
 
 
 
