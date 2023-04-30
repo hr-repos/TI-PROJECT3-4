@@ -54,7 +54,7 @@ app.post('/balance' ,(req, res) => {
                     'balance': response
                 }
             });
-            res.status(200).json(retObj);
+            res.status(200).send(retObj);
         }
     })
     .catch((error) => {
