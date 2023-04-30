@@ -39,15 +39,27 @@ public class BankApiCommunication {
     }
 
     // true goedgekeurd, // false niet goedgekeurd
-    boolean withdraw(String acctNo, String pin, int bedrag ) {
-        return true;
+    Double withdraw(String toCtry, String toBank, String acctNo, String pin, int amount) {
+        try {
+            String apiResponse = postApiRequest(toCtry, toBank, acctNo, pin, amount);
+            JsonObject jsonObject = gson.fromJson(apiResponse, JsonObject.class);
+            // System.out.println(jsonObject);
+            if (jsonObject.getAsJsonObject("body").get("succes").getAsBoolean() != true){
+                return null;
+            } else {
+                return jsonObject.getAsJsonObject("body").get("balance").getAsDouble();
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
 
     }
 
     // return het bedrag dat op de rekening staat
     public Double getBalance(String toCtry, String toBank, String acctNo, String pin){
         try {
-            String apiResponse = postApiRequest(jsonBalancePacket(toCtry, toBank, acctNo, pin));
+            String apiResponse = postApiRequest(toCtry, toBank, acctNo, pin, 0);
             JsonObject jsonObject = gson.fromJson(apiResponse, JsonObject.class);
             // System.out.println(jsonObject);
 
@@ -58,7 +70,7 @@ public class BankApiCommunication {
         }
     }
 
-    private String jsonBalancePacket(String toCtry, String toBank, String acctNo, String pin){
+    private String createJsonPacket(String toCtry, String toBank, String acctNo, String pin, int amount){
         JsonObject payload = new JsonObject();
         JsonObject head = new JsonObject();
         JsonObject body = new JsonObject();
@@ -70,40 +82,32 @@ public class BankApiCommunication {
 
         body.addProperty("acctNo", acctNo);
         body.addProperty("pin", pin);
-        
+        if (amount != 0){
+            body.addProperty("amount", amount);
+
+        }
         payload.add("head", head);
         payload.add("body", body);
 
         return gsonPretty.toJson(payload);
     }
 
-    private String jsonWithdrawPacket(String toCtry, String toBank, String acctNo, String pin, int amount){
-        String fromCtry = "LU";
-        String fromBank = "BK";
-
-        JsonObject payload = new JsonObject();
-        JsonObject head = new JsonObject();
-        JsonObject body = new JsonObject();
-
-        head.addProperty("fromCtry", fromCtry);
-        head.addProperty("fromBank", fromBank);
-        head.addProperty("toCtry", toCtry);
-        head.addProperty("toBank", toBank);
-
-        body.addProperty("acctNo", acctNo);
-        body.addProperty("pin", pin);
-        body.addProperty("amount", amount);
-        
-        payload.add("head", head);
-        payload.add("body", body);
-
-        return gson.toJson(payload);
-    }
-
-    private String postApiRequest(String payload){
+    private String postApiRequest(String toCtry, String toBank, String acctNo, String pin, int amount){
+        String jsonRequestString = createJsonPacket(toCtry, toBank, acctNo, pin, amount);
+        URL url;
         try {
-
-            URL url = new URL("http://localhost:9999/balance");
+            if (checkIfLocalAccount(acctNo) && amount == 0){
+                url = new URL("http://localhost:8443/balance");
+            } else if (checkIfLocalAccount(acctNo) && amount != 0){
+                url = new URL("http://localhost:8443/withdraw");
+            } else if (!checkIfLocalAccount(acctNo) && amount == 0){
+                url = new URL("http://145.24.222.241:8443/balance");
+            } else if (!checkIfLocalAccount(acctNo) && amount != 0) {
+                url = new URL("http://145.24.222.241:8443/withdraw");
+            } else {
+                System.out.println("Could not get the right url");
+                return "";
+            }
             
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
@@ -113,7 +117,7 @@ public class BankApiCommunication {
             
             // send json payload
             try (DataOutputStream dos = new DataOutputStream(conn.getOutputStream())) {
-                dos.writeBytes(payload);
+                dos.writeBytes(jsonRequestString);
             }
             
             // Read Response from API
@@ -132,10 +136,4 @@ public class BankApiCommunication {
             return "";
         }
     }
-
-
-
-
-
-
 }
