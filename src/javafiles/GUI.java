@@ -23,8 +23,8 @@ import javax.swing.JLabel;
 
 public class GUI {
     private JFrame frame;
-    private JLabel time, labelScanCard, labelWelkom, enterPinLabel, cardDetectedLabel, pinNumbersEnterdLabel, attempsLabel, bankImageLabel, textMaakKeuzeLabel, textSaldoBekijkenLabel, textAfbrekenLabel, textAfbrekenLabel2, textGeldOpnemenLabel, textSnelOpnemenLabel, snel70Label, snel100Label, snel150Label, fastMoneyLabel, bankImageLabel2, bankImageLabel3, checkSaldoLabel, currentSaldoLabel, continueLabel, withdrawTextLabel, textAfbrekenLabel3, bankImageLabel4, withdrawContinuLabel, withdrawAmountLabel, receiptYesLabel, receiptNoLabel, receiptLabel, bankImageLabel5, goodbyeLabel, bankImageLabel6;
-    private JPanel northPanel, centerPanel, westPanel, eastPanel, homescreen, cardDetectedScreen, loggedInScreen, loggedInScreenLeft, loggedInScreenRight, bankImagePanel6, bankImagePanel5, fastMoneyLeft, fastMoneyRight, fastMoney, checkSaldo, withdrawPanel, withdrawPanelRight, withdrawPanelLeft, receiptPanel, receiptRightPanel, receiptLeftPanel, bankImagePanel4, goodbyePanel;
+    private JLabel time, labelScanCard, labelWelkom, enterPinLabel, cardDetectedLabelRight, cardDetectedLabelLeft, cardDetectedLabel, pinNumbersEnterdLabel, attempsLabel, bankImageLabel, textMaakKeuzeLabel, textSaldoBekijkenLabel, textAfbrekenLabel, textAfbrekenLabel2, textGeldOpnemenLabel, textSnelOpnemenLabel, snel70Label, snel100Label, snel150Label, fastMoneyLabel, bankImageLabel2, bankImageLabel3, checkSaldoLabel, currentSaldoLabel, continueLabel, withdrawTextLabel, textAfbrekenLabel3, bankImageLabel4, withdrawContinuLabel, withdrawAmountLabel, receiptYesLabel, receiptNoLabel, receiptLabel, bankImageLabel5, goodbyeLabel, bankImageLabel6;
+    private JPanel northPanel, centerPanel, westPanel, eastPanel, homescreen, cardDetectedScreen, cardDetectedScreenRight, cardDetectedScreenLeft, loggedInScreen, loggedInScreenLeft, loggedInScreenRight, bankImagePanel6, bankImagePanel5, fastMoneyLeft, fastMoneyRight, fastMoney, checkSaldo, withdrawPanel, withdrawPanelRight, withdrawPanelLeft, receiptPanel, receiptRightPanel, receiptLeftPanel, bankImagePanel4, goodbyePanel;
     private JButton backButton;
     private SimpleDateFormat formatter;
     private static ImageIcon bankImage = new ImageIcon("././img/banklogo.png");
@@ -36,7 +36,6 @@ public class GUI {
     private String attempsLeft = " ";
     private String saldo = "Hier moet het saldo komen";
     private String amount = "€ ";
-    private String amount2 = "€ ";
     private String amountString = "";
 
     private GridBagConstraints gbc = new GridBagConstraints();
@@ -151,6 +150,18 @@ public class GUI {
         cardDetectedLabel.setFont(new Font(null, Font.PLAIN, 60));
         cardDetectedLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        cardDetectedLabelLeft = new JLabel("Druk * om terug te gaan");
+        cardDetectedLabelLeft.setVerticalTextPosition(JLabel.TOP);
+        cardDetectedLabelLeft.setHorizontalTextPosition(JLabel.CENTER);
+        cardDetectedLabelLeft.setFont(new Font(null, Font.PLAIN, 40));
+        cardDetectedLabelLeft.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        cardDetectedLabelRight = new JLabel("Druk # om verder te gaan");
+        cardDetectedLabelRight.setVerticalTextPosition(JLabel.TOP);
+        cardDetectedLabelRight.setHorizontalTextPosition(JLabel.CENTER);
+        cardDetectedLabelRight.setFont(new Font(null, Font.PLAIN, 40));
+        cardDetectedLabelRight.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         pinNumbersEnterdLabel = new JLabel();
         pinNumbersEnterdLabel.setText(numbersPinEnterd);
         pinNumbersEnterdLabel.setFont(new Font(null, Font.PLAIN, 30));
@@ -172,6 +183,16 @@ public class GUI {
         cardDetectedScreen.add(pinNumbersEnterdLabel, BorderLayout.SOUTH);
         cardDetectedScreen.add(attempsLabel, BorderLayout.SOUTH);
         cardDetectedScreen.setBackground(Color.white);
+
+        cardDetectedScreenLeft = new JPanel();
+        cardDetectedScreenLeft.setLayout(new BoxLayout(cardDetectedScreenLeft, BoxLayout.Y_AXIS));
+        cardDetectedScreenLeft.add(cardDetectedLabelLeft, BorderLayout.NORTH);
+        cardDetectedScreenLeft.setBackground(Color.white);
+
+        cardDetectedScreenRight = new JPanel();
+        cardDetectedScreenRight.setLayout(new BoxLayout(cardDetectedScreenRight, BoxLayout.Y_AXIS));
+        cardDetectedScreenRight.add(cardDetectedLabelRight, BorderLayout.NORTH);
+        cardDetectedScreenRight.setBackground(Color.white);
 
 
         // onderdelen voor het scherm wanneer er ingelogd is
@@ -388,6 +409,8 @@ public class GUI {
     public void setCardDetectedScreen() {
         clearScreen();
         centerPanel.add(cardDetectedScreen);
+        westPanel.add(cardDetectedScreenLeft);
+        eastPanel.add(cardDetectedScreenRight);
         switchToScreen(1);
         SwingUtilities.updateComponentTreeUI(frame);
     }
