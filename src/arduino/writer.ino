@@ -48,8 +48,8 @@ void setup() {
 
 int block=4;//this is the block number we will write into and then read. Do not write into 'sector trailer' block, since this can make the block unusable.
 
-byte blockcontent[16] = {"\"Ctry\":\"LU\","};
-//byte blockcontent[16] = {"\"Bank\":\"BK\""};                          
+byte blockcontent[16] = {"LU"};
+//byte blockcontent[16] = {"BK"};                          
 //byte blockcontent[16] = {"LU01BK000000001"};
 //byte blockcontent[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};//all zeros. This can be used to delete a block.
 byte readbackblock[18];//This array is used for reading out a block. The MIFARE_Read method requires a buffer that is at least 18 bytes to hold the 16 bytes of a block.
