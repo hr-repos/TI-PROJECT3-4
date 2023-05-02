@@ -40,6 +40,9 @@ app.post('/balance' ,(req, res) => {
         else if (response == "WRONGPIN"){
             res.status(r.wrongpin.code).send(r.wrongpin.message);
             return;
+        } else if (response == "NOWBLOCKED"){
+            res.status(r.nowblocked.code).send(r.nowblocked.message);
+            return;
         } 
         else {
             const retObj = JSON.stringify({
