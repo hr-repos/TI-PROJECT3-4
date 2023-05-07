@@ -214,7 +214,7 @@ void readBlock(byte blockNumber, byte readbackblock[])
 }
 
   void buttonPressed(){
-  while(interactionWithATM);
+  while(interactionWithATM){
   buttonState1 = digitalRead(button1);
   buttonState2 = digitalRead(button2);
   buttonState3 = digitalRead(button3);
@@ -246,5 +246,5 @@ void readBlock(byte blockNumber, byte readbackblock[])
             interactionWithATM = false;
           }
       else{}
-  }
+  }}
   }
