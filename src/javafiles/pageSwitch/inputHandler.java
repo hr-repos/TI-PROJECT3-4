@@ -2,7 +2,9 @@ package javafiles.pageSwitch;
 
 import java.awt.EventQueue;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Scanner;
 
 import javax.swing.SwingUtilities;
 
@@ -161,16 +163,28 @@ public void currentScreenFive(String inputLine){
     }
 }
 
-public void currentScreenSix(String inputLine){
+public void currentScreenSix(String inputLine) throws IOException, InterruptedException{
     if (inputLine.equals("b")){
         SwingUtilities.invokeLater(() -> scherm.setGoodbyeScreen());
+        sendText("done");
+
     }
     else if (inputLine.equals("d")){
         SwingUtilities.invokeLater(() -> scherm.setGoodbyeScreen());
+        sendText("receipt");
     } 
     
 }
 
+public void sendText(String text) throws IOException, InterruptedException{
+            Scanner input = new Scanner(System.in);
+            String str = input.nextLine();
+            System.out.println(text);
+            Thread.sleep(1500);
+            serialPort.getOutputStream().write(str.getBytes());
+            serialPort.getOutputStream().flush();
+            input.close();
+        }
 
 public void currentScreenSeven(String inputLine){
     if (inputLine != null){
@@ -181,6 +195,7 @@ public void currentScreenSeven(String inputLine){
 
   public static void main(String[] args) {
     GUI scherm = new GUI();
+    ;
     EventQueue.invokeLater(() -> {
         scherm.startup();
         scherm.updateTime();
