@@ -134,16 +134,18 @@ void loop() {
   if (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial()) {
     
     Serial.println("card selected");
+    char iban2[];
     
     readBlock(6, readbackblock);//read the block back
-    Serial.println("read block 6: ");
     for (int j=0 ; j<16 ; j++)//print the block contents
     {
       Serial.write (readbackblock[j]);//Serial.write() transmits the ASCII numbers as human readable characters to serial monitor
       iban += (char)readbackblock[j];
+      iban2[j] = (char)readbackblock[j];
     }
-    Serial.println("");
-    Serial.println("iban: " + iban);
+    char go[] = "go";
+    Serial.println(go); // sends a \n with text
+    Serial.println(iban2);
     buttonPressed();
     mfrc522.PICC_HaltA();
     mfrc522.PCD_StopCrypto1();

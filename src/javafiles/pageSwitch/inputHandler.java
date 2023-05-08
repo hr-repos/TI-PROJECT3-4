@@ -80,7 +80,7 @@ public void currentScreenZero(String inputLine) {
 }
 
 //code for pinScreen
-public void currentScreenOne(String inputLine) {
+public void currentScreenOne(String inputLine) throws IOException {
   //checks what the input is
   if (inputLine.equals("plus")) {
       if (count < 5) {
@@ -107,6 +107,11 @@ public void currentScreenOne(String inputLine) {
   } else if (inputLine.equals("correct")) {
     //hier kan het volgende scherm
       SwingUtilities.invokeLater(() -> scherm.setLoggedInScreen());
+  } else if (inputLine.equals("go")){
+            String codeLine = input.readLine();
+            System.out.println(codeLine);
+            // codeLine is the iban of pass
+            // To Do connect with database
   }
 }
 
