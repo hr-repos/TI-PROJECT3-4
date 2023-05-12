@@ -10,7 +10,6 @@ import java.net.URL;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 // binnen deze class gebeurt de communicatie met de api
 
@@ -43,33 +42,18 @@ public class BankApiCommunication {
         return text.equals("LU: ");
     }
 
-    // true goedgekeurd, // false niet goedgekeurd
-    Double getBalanceFromJsonString(String apiResponse) {
-        try {
-            JsonObject jsonObject = gson.fromJson(apiResponse, JsonObject.class);
-            return jsonObject.getAsJsonObject("body").get("balance").getAsDouble();
-
-        } catch (Exception e) {
-            System.out.println(e);
-            return null;
-        }
-
-    }
-
     Double getBalanceFromJson(String apiResponse) {
         try {
-
             JsonObject jsonObject = gson.fromJson(apiResponse, JsonObject.class);
             if (jsonObject.getAsJsonObject("body").get("succes").getAsBoolean() != true){
-                return null;
+                return -1.0;
             } else {
                 return jsonObject.getAsJsonObject("body").get("balance").getAsDouble();
             }
         } catch (Exception e) {
             System.out.println(e);
-            return null;
+            return -1.0;
         }
-
     }
 
     private String createJsonPacket(String toCtry, String toBank, String acctNo, String pin, int amount){
@@ -104,13 +88,13 @@ public class BankApiCommunication {
                 url = new URL("http://localhost:8443/balance");
             } else if (checkIfLocalAccount(acctNo) && amount != 0){
                 url = new URL("http://localhost:8443/withdraw");
-            } else if (!checkIfLocalAccount(acctNo) && amount == 0){
+            } else if (amount == 0){
                 url = new URL("http://145.24.222.241:8443/balance");
-            } else if (!checkIfLocalAccount(acctNo) && amount != 0) {
+            } else if (amount != 0) {
                 url = new URL("http://145.24.222.241:8443/withdraw");
             } else {
                 System.out.println("Could not get the right url");
-                return "";
+                return "ERROR: An error occured while getting the right api address";
             }
             
             conn = (HttpURLConnection) url.openConnection();
@@ -119,12 +103,12 @@ public class BankApiCommunication {
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setRequestProperty("User-Agent", "Mozilla/5.0");
             
-            
-            // send json payload
+            // send the request
             try (DataOutputStream dos = new DataOutputStream(conn.getOutputStream())) {
                 dos.writeBytes(jsonRequestString);
             }
             
+            // if there is an error code return the error message (string)
             if (conn.getResponseCode() >= 400){
                 try (BufferedReader bf = new BufferedReader(new InputStreamReader(conn.getErrorStream()))) {
                     StringBuilder errorMessage = new StringBuilder();
@@ -136,6 +120,7 @@ public class BankApiCommunication {
                     return errorMessage.toString();
                 }
             }
+            // else return the response message (json string)
             else {
                 // Read Response from API
                 try (BufferedReader bf = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
@@ -143,8 +128,7 @@ public class BankApiCommunication {
                         System.out.println("jsonAnswer: " + jsonAnswer);
                         return jsonAnswer;
                     }
-                    return "";
-                    
+                    return "ERROR: An error occured while trying to read the api response";
                 }
             }
         } catch (Exception e) {
