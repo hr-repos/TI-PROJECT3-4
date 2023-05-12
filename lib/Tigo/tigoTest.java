@@ -200,6 +200,7 @@ public void logIn(String inputLine){
             
             String newAmountString = codeString.substring(0, codeString.length() - 1);
             if (newAmountString.length() == 0) {
+                codeString = "";
             }
             else {
             codeString = newAmountString;
@@ -207,8 +208,8 @@ public void logIn(String inputLine){
         }
         else if (inputLine.equals("check")){
         try {
-            
-            if (codeString == "1234") {
+            System.out.println(codeString);
+            if (codeString.equals("1234")) {
                 SwingUtilities.invokeLater(() -> scherm.setLoggedInScreen());
             }
             else {
@@ -220,7 +221,6 @@ public void logIn(String inputLine){
         }}
         else {
             codeString += inputLine;
-            System.out.println(codeString);
         }
     }
 
