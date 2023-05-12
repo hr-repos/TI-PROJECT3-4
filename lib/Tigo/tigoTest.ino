@@ -28,10 +28,10 @@ Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 MFRC522 mfrc522(SS_PIN, RST_PIN);        // instatiate a MFRC522 reader object.
 MFRC522::MIFARE_Key key;//create a MIFARE_Key struct named 'key', which will hold the card information
 
-#define button1 20
-#define button2 21
-#define button3 22
-#define button4 23
+#define button1 24
+#define button2 25
+#define button3 26
+#define button4 27
 
 int buttonState1;
 int buttonState2;
@@ -146,7 +146,7 @@ void readBlock(byte blockNumber, byte readbackblock[])
         Serial.println(key);
         delay(500);
       } else if (key == '#') {
-        Serial.println("confirm");
+        Serial.println("check");
         delay(500);
     }   else if (key == '*') {
         Serial.println("back");
