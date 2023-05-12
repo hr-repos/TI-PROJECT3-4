@@ -1,4 +1,4 @@
-package javafiles.pageSwitch;
+package lib.Tigo;
 
 import java.awt.EventQueue;
 import java.io.BufferedReader;
@@ -11,7 +11,7 @@ import javax.swing.SwingUtilities;
 import com.fazecast.jSerialComm.SerialPort;
 import javafiles.GUI;
 
-public class inputHandler {
+public class tigoTest {
   private SerialPort serialPort;
   private BufferedReader input;
 
@@ -19,8 +19,10 @@ public class inputHandler {
   private int count;
   private int triesLeft = 3;
   private int wrongTries;
+  private String codeString ="";
+  private int codeInt;
 
-  public inputHandler(GUI scherm) {
+  public tigoTest(GUI scherm) {
     this.scherm = scherm;
   }
 
@@ -72,8 +74,10 @@ public void updateSetPinNumbersEntered(int count){
 }
 
 //code for homeScreen
-public void currentScreenZero(String inputLine) {
+public void currentScreenZero(String inputLine) throws IOException {
   if (inputLine.equals("pass found")) {
+    String iban = input.readLine();
+    System.out.println(iban + " is the iban");
       updateSetPinNumbersEntered(0); 
   }
   else{}
@@ -82,31 +86,21 @@ public void currentScreenZero(String inputLine) {
 //code for pinScreen
 public void currentScreenOne(String inputLine) throws IOException {
   //checks what the input is
-  if (inputLine.equals("plus")) {
+  if (inputLine.matches("[0-9]")) {
       if (count < 5) {
           count++;
           updateSetPinNumbersEntered(count);
+          logIn(inputLine);
       }
-  } else if (inputLine.equals("minus")) {
+  } else if (inputLine.equals("back")) {
       if (count > 0) {
           count--;
           updateSetPinNumbersEntered(count);
-      }
-  } else if (inputLine.equals("wrong")) {
-      if (triesLeft > 1) {
-          count = 0;
-          triesLeft--;
-          wrongTries++;
-          System.out.println("Je hebt nog " + triesLeft + " pogingen");
-          scherm.attempsLeft(wrongTries);
-          updateSetPinNumbersEntered(count);
-      } else {
-          SwingUtilities.invokeLater(() -> scherm.setHomeScreen());
-
-      }   
-  } else if (inputLine.equals("correct")) {
+          logIn(inputLine);
+      } 
+  } else if (inputLine.equals("check")) {
     //hier kan het volgende scherm
-      SwingUtilities.invokeLater(() -> scherm.setLoggedInScreen());
+      logIn(inputLine);
   } //else if (inputLine.equals("go")){
             //String codeLine = input.readLine();
             //System.out.println(codeLine);
@@ -164,7 +158,6 @@ public void currentScreenFive(String inputLine){
         SwingUtilities.invokeLater(() -> scherm.setLoggedInScreen());
     } else if (inputLine.matches("[0-9]")) {
         scherm.transactionAmount(inputLine);
-        // System.out.println("i made it");
         SwingUtilities.invokeLater(() -> scherm.setWithdrawScreen());
     } else if (inputLine.equals("*")){
         scherm.transactionAmount(inputLine);
@@ -202,6 +195,50 @@ public void currentScreenSeven(String inputLine){
     else{}
 }
 
+public void logIn(String inputLine){
+        if (inputLine.equals("back")){
+            
+            String newAmountString = codeString.substring(0, codeString.length() - 1);
+            if (newAmountString.length() == 0) {
+            }
+            else {
+            codeString = newAmountString;
+            }
+        }
+        else if (inputLine.equals("check")){
+        try {
+            
+            if (codeString == "1234") {
+                SwingUtilities.invokeLater(() -> scherm.setLoggedInScreen());
+            }
+            else {
+                wrongPin();
+            }
+        } catch (NumberFormatException e) {
+            // Handle invalid input
+            System.out.println("Invalid input");
+        }}
+        else {
+            codeString += inputLine;
+            System.out.println(codeString);
+        }
+    }
+
+    public void wrongPin(){
+        if (triesLeft > 1) {
+            count = 0;
+            triesLeft--;
+            wrongTries++;
+            codeString = "";
+            System.out.println("Je hebt nog " + triesLeft + " pogingen");
+            scherm.attempsLeft(wrongTries);
+            updateSetPinNumbersEntered(count);
+        } else {
+            SwingUtilities.invokeLater(() -> scherm.setHomeScreen());
+
+        }   
+    }
+
   public static void main(String[] args) {
     GUI scherm = new GUI();
     EventQueue.invokeLater(() -> {
@@ -209,7 +246,7 @@ public void currentScreenSeven(String inputLine){
         scherm.updateTime();
     });
     
-    inputHandler listener = new inputHandler(scherm);
+    tigoTest listener = new tigoTest(scherm);
     listener.initialize();
     Thread readDataThread = new Thread(() -> listener.readData());
     readDataThread.start();

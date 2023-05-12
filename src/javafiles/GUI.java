@@ -35,7 +35,7 @@ public class GUI {
     private String attempsLeft2 = " pogingen over";
     private String attempsLeft = " ";
     private String saldo = "Hier moet het saldo komen";
-    private String amount = "€ ";
+    private String amount = "0.00";
     private String amountString = "";
 
     private GridBagConstraints gbc = new GridBagConstraints();
@@ -417,7 +417,7 @@ public class GUI {
 
     public void setLoggedInScreen(){
         clearScreen();
-        amount = "€ ";
+        amount = "0.00";
         amountString = "";
         centerPanel.add(loggedInScreen);
         westPanel.add(loggedInScreenLeft, gbc);
@@ -505,17 +505,32 @@ public class GUI {
     }
 
     public void transactionAmount(String amountInput) {
+        if (amountInput.equals("*")) {
+            String newAmountString = amountString.substring(0, amountString.length() - 1);
+            if (newAmountString.length() == 0) {
+                amount = "0.00";
+                amountString = "";
+            }
+            else {
+            double amountDouble = Double.parseDouble(newAmountString);
+            amountDouble /= 100.0;
+            amount = String.format("%.2f", amountDouble); // Format the amount to 2 decimal places
+            withdrawAmountLabel.setText(amount);
+            amountString = newAmountString;
+            }
+        }
+        else {
         amountString += amountInput;
         try {
             double amountDouble = Double.parseDouble(amountString);
             amountDouble /= 100.0;
             amount = String.format("%.2f", amountDouble); // Format the amount to 2 decimal places
 
-            withdrawAmountLabel.setText(amount); // Include the € symbol in the label
+            withdrawAmountLabel.setText(amount);
         } catch (NumberFormatException e) {
             // Handle invalid input
             withdrawAmountLabel.setText("Invalid input");
         }
     }
-    
+    }
 }
