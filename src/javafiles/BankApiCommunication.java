@@ -42,12 +42,30 @@ public class BankApiCommunication {
         return text.equals("LU: ");
     }
 
+    Double getBalanceAfterWithdrawFromJson(String apiResponse) {
+        try {
+            JsonObject jsonObject = gson.fromJson(apiResponse, JsonObject.class);
+            if (jsonObject == null){
+                return -1.0;
+            }
+            else if (jsonObject.getAsJsonObject("body").get("succes").getAsBoolean() != true){
+                return -1.0;
+            } else {
+                return jsonObject.getAsJsonObject("body").get("balance").getAsDouble();
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            return -1.0;
+        }
+    }
+
     Double getBalanceFromJson(String apiResponse) {
         try {
             JsonObject jsonObject = gson.fromJson(apiResponse, JsonObject.class);
-            if (jsonObject.getAsJsonObject("body").get("succes").getAsBoolean() != true){
+            if (jsonObject == null){
                 return -1.0;
-            } else {
+            }
+            else {
                 return jsonObject.getAsJsonObject("body").get("balance").getAsDouble();
             }
         } catch (Exception e) {
