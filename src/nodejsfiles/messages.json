@@ -34,6 +34,10 @@
 		"broke": {
 			"code": 400,
 			"message": "LU: Not enough credit"
+		},
+		"wrongVariableType": {
+			"code": 400,
+			"message": "LU: JSON error: check variable types"
 		}
 	}
 }

@@ -1,10 +1,11 @@
 const express = require('express');
 const app = express();
-const PORT = 8443
-const country = "LU"
-const bank = "BANK"
+const PORT = 8443;
+const country = "LU";
+const bank = "BANK";
 const dotenv = require('dotenv');
 const messages = require('./messages.json');
+const Joi = require("joi");
 const r = messages.bank;
 dotenv.config();
 
@@ -18,7 +19,42 @@ app.listen (
     () => console.log(`It's alive on http://localhost:${PORT}`)
 )
 
+const withdrawValidator = Joi.object({
+    head: {
+        fromCtry: Joi.string().required(),
+        fromBank: Joi.string().required(),
+    },
+    body: {
+        acctNo: Joi.string().required(),
+        pin: Joi.string().required(),
+        amount: Joi.number().required(),
+    },
+});
+
+const balanceValidator = Joi.object({
+    head: {
+        fromCtry: Joi.string().required(),
+        fromBank: Joi.string().required(),
+    },
+    body: {
+        acctNo: Joi.string().required(),
+        pin: Joi.string().required(),
+    },
+});
+
+const options = {
+    allowUnknown: true
+};
+
+
+
 app.post('/balance' ,(req, res) => {
+    const {error, value} = balanceValidator.validate(req.body, options);
+    if (error){
+        console.log(error)
+        return res.status(r.wrongVariableType.code).send(r.wrongVariableType.message);
+    }
+
     if (!req.is('application/json')){
         console.log(r.expectedJSONError.message + wysd.sanityCheck)
         res.status(r.expectedJSONError.code).send(r.expectedJSONError.message);
@@ -67,6 +103,12 @@ app.post('/balance' ,(req, res) => {
 });
 
 app.post('/withdraw' ,(req, res) => {
+    const {error, value} = withdrawValidator.validate(req.body, options);
+    if (error){
+        console.log(error)
+        return res.status(r.wrongVariableType.code).send(r.wrongVariableType.message);
+    }
+
     if (!req.is('application/json')){
         console.log(r.expectedJSONError.message + wysd.sanityCheck)
         res.status(r.expectedJSONError.code).send(r.expectedJSONError.message);
@@ -117,9 +159,9 @@ app.post('/withdraw' ,(req, res) => {
     .catch((error) => {
         res.status(r.somethingHappened.code).send(r.somethingHappened.message);
         console.log(error);
-    })
+    }) 
 
-});
+}); 
 
 // testfuncties hieronder
 // Probeer uit met localhost:9999/testpin/1234
