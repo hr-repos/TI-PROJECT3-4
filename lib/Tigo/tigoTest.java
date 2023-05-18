@@ -111,7 +111,7 @@ public void currentScreenZero(String inputLine) throws IOException {
 public void currentScreenOne(String inputLine) throws IOException {
   //checks what the input is
   if (inputLine.matches("[0-9]")) {
-      if (count < 5) {
+      if (count < 4) {
           count++;
           updateSetPinNumbersEntered(count);
           logIn(inputLine);
@@ -224,7 +224,7 @@ public void logIn(String inputLine){
             codeString = newAmountString;
             }
         }
-        else if (inputLine.equals("check")){
+        else if (inputLine.equals("check") && count == 4){
         try {
             System.out.println(codeString);
             if (codeString.equals(retrieveData(iban))) {
