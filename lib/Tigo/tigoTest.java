@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 
 import com.fazecast.jSerialComm.SerialPort;
 import javafiles.GUI;
+import BankApi.*;
 
 public class tigoTest {
   private SerialPort serialPort;
@@ -21,6 +22,8 @@ public class tigoTest {
   private int wrongTries;
   private String codeString ="";
   private int codeInt;
+
+  BankApiCommunication bankApi = new BankApiCommunication("LU", "BK");
 
   public tigoTest(GUI scherm) {
     this.scherm = scherm;
@@ -80,10 +83,17 @@ public void currentScreenZero(String inputLine) throws IOException {
     String land = input.readLine();
     String bank = input.readLine();
     
+    if (bankApi.checkIfLocalAccount(iban)) {
+        updateSetPinNumbersEntered(0);
+    } else {
+        // Handle the case when the `iban` is not a local account
+        // You can add your logic here
+    }
+    
     System.out.println(iban + " is the iban");
     System.out.println(land + " is the land");
     System.out.println(bank + " is the bank");
-      updateSetPinNumbersEntered(0); 
+    
   }
   else{}
 }
@@ -240,11 +250,11 @@ public void logIn(String inputLine){
 
   public static void main(String[] args) {
     GUI scherm = new GUI();
+    
     EventQueue.invokeLater(() -> {
         scherm.startup();
         scherm.updateTime();
     });
-    
     tigoTest listener = new tigoTest(scherm);
     listener.initialize();
     Thread readDataThread = new Thread(() -> listener.readData());

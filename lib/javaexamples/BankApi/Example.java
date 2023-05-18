@@ -1,4 +1,4 @@
-package lib.javaexamples.BankApi;
+package BankApi;
 
 
 /**

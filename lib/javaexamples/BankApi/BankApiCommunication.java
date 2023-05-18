@@ -1,5 +1,5 @@
 
-package lib.javaexamples.BankApi;
+package BankApi;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -30,10 +30,10 @@ public class BankApiCommunication {
     }
 
     // controleerd of het rekeningnummer van onze bank is en returnt true of false
-    private boolean checkIfLocalAccount(String acctNo){
-        int offset = Math.min(9, acctNo.length());
+    public boolean checkIfLocalAccount(String acctNo){
+        int offset = Math.min(6, acctNo.length());
         String text = acctNo.substring(0, offset);
-        return text.equals("LUX01BANK");
+        return text.equals("LU01BK");
     }
 
     public boolean checkIfError(String inpuString){
