@@ -13,8 +13,8 @@ public class Example {
     }
 
     public void run(){
-        Double balance = handleBalanceRequest("LU", "BK", "LUX01BANK000005", "7869");
-        Double balanceAfterWithdraw = handleWithdrawRequest("LU", "BK", "LUX01BANK000005", "7869", 20);
+        Double balance = handleBalanceRequest("LU", "BK", "LU01BK000005", "7869");
+        Double balanceAfterWithdraw = handleWithdrawRequest("LU", "BK", "LU01BK000005", "7869", 20);
         System.out.println(balance);
         System.out.println(balanceAfterWithdraw);
     }
