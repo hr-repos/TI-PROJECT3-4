@@ -42,11 +42,9 @@ bool interactionWithATM = true;
 bool passwordIsTrue = false;
 
 byte readbackblock[18];
-int block = 4;
-int block2 = 5;
-int block3 = 6;
 String iban= "";
 String land= "";
+String bank = "";
 
 void setup() {
 
@@ -79,9 +77,9 @@ void cardScanner(){
   memset(readbackblock, 0, sizeof(readbackblock));
   iban = "";
   land = "";
+  bank = "";
   // Look for new cards
   if (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial()) {
-    
     char buttonPress[] = "pass found";
     Serial.println(buttonPress);
     
@@ -92,16 +90,46 @@ void cardScanner(){
       iban += (char)readbackblock[j];
 
     }
-  char ibanArray[20];
-  iban.toCharArray(ibanArray, 20); // copy the string into the character array
+    mfrc522.PICC_HaltA();
+    mfrc522.PCD_StopCrypto1();
+    memset(readbackblock, 0, sizeof(readbackblock));
+    if (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial()) {
+    readBlock(4, readbackblock);//read the block back
+    for (int l=0 ; l<16 ; l++)//print the block contents
+    {
 
-Serial.println(ibanArray); // print the character array 
+      land += (char)readbackblock[l];
+
+    }
+   mfrc522.PICC_HaltA();
+   mfrc522.PCD_StopCrypto1();
+   if (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial()) {
+    memset(readbackblock, 0, sizeof(readbackblock));
+    readBlock(5, readbackblock);//read the block back
+    for (int i=0 ; i<16 ; i++)//print the block contents
+    {
+
+      bank += (char)readbackblock[i];
+
+    }
+
+  char ibanArray[20];
+  char landArray[20];
+  char bankArray[20];
+  iban.toCharArray(ibanArray, 20); // copy the string into the character array
+  land.toCharArray(landArray, 20); // copy the string into the character array
+  bank.toCharArray(bankArray, 20); // copy the string into the character array
+  Serial.println(ibanArray); // print the character array 
+  Serial.println(landArray); // print the character array
+  Serial.println(bankArray); // print the character array
 
 memset(readbackblock, 0, sizeof(readbackblock));
     mfrc522.PICC_HaltA();
     mfrc522.PCD_StopCrypto1();
     buttonPressed();
-  }
+        }
+      }
+    }
   }
 
 void readBlock(byte blockNumber, byte readbackblock[])

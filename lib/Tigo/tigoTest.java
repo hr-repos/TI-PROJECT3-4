@@ -77,7 +77,12 @@ public void updateSetPinNumbersEntered(int count){
 public void currentScreenZero(String inputLine) throws IOException {
   if (inputLine.equals("pass found")) {
     String iban = input.readLine();
+    String land = input.readLine();
+    String bank = input.readLine();
+    
     System.out.println(iban + " is the iban");
+    System.out.println(land + " is the land");
+    System.out.println(bank + " is the bank");
       updateSetPinNumbersEntered(0); 
   }
   else{}
@@ -99,14 +104,8 @@ public void currentScreenOne(String inputLine) throws IOException {
           logIn(inputLine);
       } 
   } else if (inputLine.equals("check")) {
-    //hier kan het volgende scherm
       logIn(inputLine);
-  } //else if (inputLine.equals("go")){
-            //String codeLine = input.readLine();
-            //System.out.println(codeLine);
-            // codeLine is the iban of pass
-            // To Do connect with database
-  //}
+  } 
 }
 
 //Options
@@ -168,24 +167,24 @@ public void currentScreenFive(String inputLine){
 public void currentScreenSix(String inputLine) throws IOException, InterruptedException{
     if (inputLine.equals("b")){
         SwingUtilities.invokeLater(() -> scherm.setGoodbyeScreen());
-        //sendText("done");
+        sendText("done");
 
     }
     else if (inputLine.equals("d")){
         SwingUtilities.invokeLater(() -> scherm.setGoodbyeScreen());
-        //sendText("receipt");
+        sendText("receipt");
     } 
     
 }
 
 public void sendText(String text) throws IOException, InterruptedException{
-            Scanner input = new Scanner(System.in);
-            String str = input.nextLine();
-            System.out.println(text);
-            Thread.sleep(1500);
-            serialPort.getOutputStream().write(str.getBytes());
+            try (Scanner input = new Scanner(System.in)) {
+                String str = input.nextLine();
+                System.out.println(text);
+                Thread.sleep(1500);
+                serialPort.getOutputStream().write(str.getBytes());
+            }
             serialPort.getOutputStream().flush();
-            input.close();
         }
 
 public void currentScreenSeven(String inputLine){
