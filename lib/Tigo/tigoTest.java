@@ -10,7 +10,9 @@ import javax.swing.SwingUtilities;
 
 import com.fazecast.jSerialComm.SerialPort;
 import javafiles.GUI;
+import javafiles.database;
 import BankApi.*;
+import java.sql.*;
 
 public class tigoTest {
   private SerialPort serialPort;
@@ -22,6 +24,13 @@ public class tigoTest {
   private int wrongTries;
   private String codeString ="";
   private int codeInt;
+  String iban = "";
+  String land = "";
+  String bank = "";
+
+  static String url = "jdbc:mysql://145.24.222.188:8649/bank";
+   static String username = "sqluser";
+   static String password = "q76^UQT7!BcR";
 
   BankApiCommunication bankApi = new BankApiCommunication("LU", "BK");
 
@@ -79,9 +88,9 @@ public void updateSetPinNumbersEntered(int count){
 //code for homeScreen
 public void currentScreenZero(String inputLine) throws IOException {
   if (inputLine.equals("pass found")) {
-    String iban = input.readLine();
-    String land = input.readLine();
-    String bank = input.readLine();
+    iban = input.readLine();
+    land = input.readLine();
+    bank = input.readLine();
     
     if (bankApi.checkIfLocalAccount(iban)) {
         updateSetPinNumbersEntered(0);
@@ -218,7 +227,7 @@ public void logIn(String inputLine){
         else if (inputLine.equals("check")){
         try {
             System.out.println(codeString);
-            if (codeString.equals("1234")) {
+            if (codeString.equals(retrieveData(iban))) {
                 SwingUtilities.invokeLater(() -> scherm.setLoggedInScreen());
             }
             else {
@@ -247,6 +256,40 @@ public void logIn(String inputLine){
 
         }   
     }
+
+    public static String retrieveData(String iban) {
+        String code = null;
+    
+        try {
+            Connection conn = DriverManager.getConnection(url, username, password);
+            System.out.println("Connected to the database.");
+    
+            // create a statement object
+            Statement stmt = conn.createStatement();
+    
+            // execute a query and get the result set
+            ResultSet rs = stmt.executeQuery("SELECT * FROM test WHERE IBAN ='" + iban + "';");
+    
+            // check if the result set has any data
+            if (rs.next()) {
+                // retrieve the code
+                code = rs.getString("PINCODE");
+            } else {
+                System.out.println("No data found for the provided IBAN: " + iban);
+            }
+    
+            // close the result set, statement, and connection
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println("Failed to retrieve data from the database.");
+            e.printStackTrace();
+        }
+    
+        return code;
+    }
+    
 
   public static void main(String[] args) {
     GUI scherm = new GUI();
