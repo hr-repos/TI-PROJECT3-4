@@ -59,7 +59,7 @@ public class BankApiCommunication {
         }
     }
 
-    Double getBalanceFromJson(String apiResponse) {
+    public Double getBalanceFromJson(String apiResponse) {
         try {
             JsonObject jsonObject = gson.fromJson(apiResponse, JsonObject.class);
             if (jsonObject == null){
