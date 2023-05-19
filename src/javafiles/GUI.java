@@ -500,8 +500,9 @@ public class GUI {
         attempsLabel.setText(attempsLeft);
     }
 
-    public void retrieveSaldo(){
-        //TO Do make class to return saldo
+    public void retrieveSaldo(Double moneyOnAcc){
+        String moneyOnAccString = String.format("%.2f", moneyOnAcc);
+        currentSaldoLabel.setText(moneyOnAccString);
     }
 
     public void transactionAmount(String amountInput) {

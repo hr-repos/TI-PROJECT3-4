@@ -186,6 +186,7 @@ void readBlock(byte blockNumber, byte readbackblock[])
 
   void buttonPressed(){
   while(interactionWithATM){
+  delay(300);
   buttonState1 = digitalRead(button1);
   buttonState2 = digitalRead(button2);
   buttonState3 = digitalRead(button3);

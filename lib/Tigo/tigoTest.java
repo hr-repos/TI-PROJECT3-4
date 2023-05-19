@@ -27,6 +27,7 @@ public class tigoTest {
   String iban = "";
   String land = "";
   String bank = "";
+  String pass = "";
 
   static String url = "jdbc:mysql://145.24.222.188:8649/bank";
    static String username = "sqluser";
@@ -130,13 +131,16 @@ public void currentScreenOne(String inputLine) throws IOException {
 //Options
 public void currentScreenTwo(String inputLine) throws IOException, InterruptedException{
     if (inputLine.equals("a")){
+        double balance = handleBalanceRequest(land,bank,iban,pass);
         SwingUtilities.invokeLater(() -> scherm.setCheckSaldoScreen());
+        System.out.println(balance + " is the balance");
+        scherm.retrieveSaldo(balance);
     }
     else if (inputLine.equals("b")){
         SwingUtilities.invokeLater(() -> scherm.setHomeScreen());
         sendText("done");
     }
-    else if (inputLine.equals("c")){
+    else if (inputLine.equals("c")){   
         SwingUtilities.invokeLater(() -> scherm.setWithdrawScreen());
     }
     else if (inputLine.equals("d")){
@@ -161,8 +165,9 @@ public void currentScreenThree(String inputLine){
 }
 
 //Saldo check
-public void currentScreenFour(String inputLine){
+public void currentScreenFour(String inputLine) throws InterruptedException{
     if (inputLine != null){
+        
         SwingUtilities.invokeLater(() -> scherm.setLoggedInScreen());
     }
     else{}}
@@ -228,6 +233,7 @@ public void logIn(String inputLine){
         try {
             System.out.println(codeString);
             if (codeString.equals(retrieveData(iban))) {
+                pass = codeString;
                 SwingUtilities.invokeLater(() -> scherm.setLoggedInScreen());
             }
             else {
@@ -290,6 +296,43 @@ public void logIn(String inputLine){
         return code;
     }
     
+    Double handleBalanceRequest(String toCtry, String toBank, String acctNo, String pin){
+        String apiResponse = bankApi.postApiRequest(toCtry, toBank, acctNo, pin, 0);
+        if (apiResponse.equals("")){
+            handleApiError("");
+            return -1.0;
+        }
+        else if (apiResponse.equals(null)){
+            handleApiError(apiResponse);
+            return -1.0;
+        } 
+        else if (bankApi.checkIfError(apiResponse)){
+            handleApiError(apiResponse);
+            return -1.0;
+        } 
+        else {
+            return bankApi.getBalanceFromJson(apiResponse);
+        }
+    }
+
+    void handleApiError(String apiResponse){
+        if (apiResponse.equals("LU: Account number not recognized")){
+            // handle 
+        } 
+        else if (apiResponse.equals("LU: Account is blocked, contact BANK")){
+            // handle 
+
+        }
+        else if (apiResponse.equals("LU: To many attempts, account is now blocked, contact BANK")){
+            // handle 
+        }
+        else if (apiResponse.equals("LU: Not enough credit")){
+            // handle 
+        }
+        else {
+            System.out.println("F handleApiError: unexpected error: " + apiResponse);
+        }
+    }
 
   public static void main(String[] args) {
     GUI scherm = new GUI();
