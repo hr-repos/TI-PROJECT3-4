@@ -23,7 +23,9 @@ public class tigoTest {
   private int triesLeft = 3;
   private int wrongTries;
   private String codeString ="";
+  private String amountString = "";
   private int codeInt;
+  private int withdrawAmount;
   String iban = "";
   String land = "";
   String bank = "";
@@ -144,7 +146,8 @@ public void currentScreenTwo(String inputLine) throws IOException, InterruptedEx
         SwingUtilities.invokeLater(() -> scherm.setWithdrawScreen());
     }
     else if (inputLine.equals("d")){
-        SwingUtilities.invokeLater(() -> scherm.setFastMoneyScreen());
+        withdrawAmount = 70;
+        SwingUtilities.invokeLater(() -> scherm.setReceiptScreen());
     }
 }
 
@@ -175,15 +178,27 @@ public void currentScreenFour(String inputLine) throws InterruptedException{
 //Withdraw
 public void currentScreenFive(String inputLine){
     if (inputLine.equals("d")){
+        System.out.println(withdrawAmount + " is the withdraw amount");
         SwingUtilities.invokeLater(() -> scherm.setReceiptScreen());
     }
     else if (inputLine.equals("b")){
         SwingUtilities.invokeLater(() -> scherm.setLoggedInScreen());
     } else if (inputLine.matches("[0-9]")) {
-        scherm.transactionAmount(inputLine);
+        amountString += inputLine;
+        withdrawAmount =+ Integer.parseInt(amountString);
+        scherm.transactionAmount(amountString);
         SwingUtilities.invokeLater(() -> scherm.setWithdrawScreen());
-    } else if (inputLine.equals("*")){
-        scherm.transactionAmount(inputLine);
+    } else if (inputLine.equals("back")){
+        String newAmountString = amountString.substring(0, amountString.length() - 1);
+            if (newAmountString.length() == 0) {
+                withdrawAmount = 0;
+                amountString = "";
+            }
+            else {
+            amountString = newAmountString;
+            }
+        withdrawAmount = Integer.parseInt(amountString);
+        scherm.transactionAmount(amountString);
         SwingUtilities.invokeLater(() -> scherm.setWithdrawScreen());
     }
 }
