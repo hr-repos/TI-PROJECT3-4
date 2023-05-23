@@ -204,6 +204,8 @@ public void currentScreenFive(String inputLine){
 }
 
 public void currentScreenSix(String inputLine) throws IOException, InterruptedException{
+    Double balanceAfterWithdraw = handleWithdrawRequest(land, bank, iban, pass ,withdrawAmount);
+    System.out.println(balanceAfterWithdraw + " is the balance after withdraw");
     if (inputLine.equals("b")){
         SwingUtilities.invokeLater(() -> scherm.setGoodbyeScreen());
         sendText("done");
@@ -346,6 +348,28 @@ public void logIn(String inputLine){
         }
         else {
             System.out.println("F handleApiError: unexpected error: " + apiResponse);
+        }
+    }
+
+    Double handleWithdrawRequest(String toCtry, String toBank, String acctNo, String pin, int amount){
+        String apiResponse = bankApi.postApiRequest(toCtry, toBank, acctNo, pin, amount);
+        if (apiResponse.equals("")){
+            System.out.println("handleWithdrawRequest: Empty api response");
+            handleApiError("");
+            return -1.0;
+        }
+        else if (apiResponse.equals(null)){
+            System.out.println("handleWithdrawRequest: received null (api offline?)");
+            handleApiError("");
+            return -1.0;
+        }
+        else if (bankApi.checkIfError(apiResponse)){
+            System.out.println("handleWithdrawRequest: predefined error");
+            handleApiError(apiResponse);
+            return -1.0;
+        } 
+        else {
+            return bankApi.getBalanceAfterWithdrawFromJson(apiResponse);
         }
     }
 
