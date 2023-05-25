@@ -42,7 +42,7 @@ public class BankApiCommunication {
         return text.equals("LU: ");
     }
 
-    Double getBalanceAfterWithdrawFromJson(String apiResponse) {
+    public Double getBalanceAfterWithdrawFromJson(String apiResponse) {
         try {
             JsonObject jsonObject = gson.fromJson(apiResponse, JsonObject.class);
             if (jsonObject == null){

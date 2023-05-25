@@ -10,7 +10,6 @@ import javax.swing.SwingUtilities;
 
 import com.fazecast.jSerialComm.SerialPort;
 import javafiles.GUI;
-import javafiles.database;
 import BankApi.*;
 import java.sql.*;
 
@@ -95,17 +94,10 @@ public void currentScreenZero(String inputLine) throws IOException {
     land = input.readLine();
     bank = input.readLine();
     
-    if (bankApi.checkIfLocalAccount(iban)) {
-        updateSetPinNumbersEntered(0);
-    } else {
-        // Handle the case when the `iban` is not a local account
-        // You can add your logic here
-    }
-    
     System.out.println(iban + " is the iban");
     System.out.println(land + " is the land");
     System.out.println(bank + " is the bank");
-    
+    updateSetPinNumbersEntered(0);
   }
   else{}
 }
@@ -133,7 +125,7 @@ public void currentScreenOne(String inputLine) throws IOException {
 //Options
 public void currentScreenTwo(String inputLine) throws IOException, InterruptedException{
     if (inputLine.equals("a")){
-        double balance = handleBalanceRequest(land,bank,iban,pass);
+        double balance = handleBalanceRequest(land, bank, iban, pass);
         SwingUtilities.invokeLater(() -> scherm.setCheckSaldoScreen());
         System.out.println(balance + " is the balance");
         scherm.retrieveSaldo(balance);
@@ -249,7 +241,8 @@ public void logIn(String inputLine){
         else if (inputLine.equals("check") && count == 4){
         try {
             System.out.println(codeString);
-            if (codeString.equals(retrieveData(iban))) {
+            double accData = handleBalanceRequest(land, bank, iban, codeString);
+            if (accData != -1.0) {
                 pass = codeString;
                 SwingUtilities.invokeLater(() -> scherm.setLoggedInScreen());
             }
@@ -280,38 +273,7 @@ public void logIn(String inputLine){
         }   
     }
 
-    public static String retrieveData(String iban) {
-        String code = null;
     
-        try {
-            Connection conn = DriverManager.getConnection(url, username, password);
-            System.out.println("Connected to the database.");
-    
-            // create a statement object
-            Statement stmt = conn.createStatement();
-    
-            // execute a query and get the result set
-            ResultSet rs = stmt.executeQuery("SELECT * FROM test WHERE IBAN ='" + iban + "';");
-    
-            // check if the result set has any data
-            if (rs.next()) {
-                // retrieve the code
-                code = rs.getString("PINCODE");
-            } else {
-                System.out.println("No data found for the provided IBAN: " + iban);
-            }
-    
-            // close the result set, statement, and connection
-            rs.close();
-            stmt.close();
-            conn.close();
-        } catch (SQLException e) {
-            System.out.println("Failed to retrieve data from the database.");
-            e.printStackTrace();
-        }
-    
-        return code;
-    }
     
     Double handleBalanceRequest(String toCtry, String toBank, String acctNo, String pin){
         String apiResponse = bankApi.postApiRequest(toCtry, toBank, acctNo, pin, 0);
