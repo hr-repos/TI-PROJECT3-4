@@ -61,7 +61,7 @@ void loop() {
       memset(readbackblock, 0, sizeof(readbackblock));
       
       if (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial()) {
-        readBlock(block3, readbackblock);//read the block back
+        readBlock(block2, readbackblock);//read the block back
         Serial.println("read block 6: ");
         for (int l=0 ; l<16 ; l++)//print the block contents
         {

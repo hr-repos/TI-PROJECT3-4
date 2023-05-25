@@ -23,7 +23,7 @@ import javax.swing.JLabel;
 
 public class GUI {
     private JFrame frame;
-    private JLabel time, labelScanCard, labelWelkom, enterPinLabel, cardDetectedLabelRight, cardDetectedLabelLeft, cardDetectedLabel, pinNumbersEnterdLabel, attempsLabel, bankImageLabel, textMaakKeuzeLabel, textSaldoBekijkenLabel, textAfbrekenLabel, textAfbrekenLabel2, textGeldOpnemenLabel, textSnelOpnemenLabel, snel70Label, snel100Label, snel150Label, fastMoneyLabel, bankImageLabel2, bankImageLabel3, checkSaldoLabel, currentSaldoLabel, continueLabel, withdrawTextLabel, textAfbrekenLabel3, bankImageLabel4, withdrawContinuLabel, withdrawAmountLabel, receiptYesLabel, receiptNoLabel, receiptLabel, bankImageLabel5, goodbyeLabel, bankImageLabel6;
+    private JLabel time, labelScanCard, labelWelkom, enterPinLabel, cardDetectedLabelRight, cardDetectedLabelLeft, cardDetectedLabel, pinNumbersEnterdLabel, attempsLabel, bankImageLabel, textMaakKeuzeLabel, textSaldoBekijkenLabel, textAfbrekenLabel, textAfbrekenLabel2, textGeldOpnemenLabel, textSnelOpnemenLabel, snel70Label, snel100Label, snel150Label, fastMoneyLabel, bankImageLabel2, bankImageLabel3, checkSaldoLabel, currentSaldoLabel, continueLabel, withdrawTextLabel, textAfbrekenLabel3, bankImageLabel4, withdrawContinuLabel, withdrawAmountLabel, receiptYesLabel, receiptNoLabel, receiptLabel, bankImageLabel5, goodbyeLabel, bankImageLabel6, notAllowedLabel;
     private JPanel northPanel, centerPanel, westPanel, eastPanel, homescreen, cardDetectedScreen, cardDetectedScreenRight, cardDetectedScreenLeft, loggedInScreen, loggedInScreenLeft, loggedInScreenRight, bankImagePanel6, bankImagePanel5, fastMoneyLeft, fastMoneyRight, fastMoney, checkSaldo, withdrawPanel, withdrawPanelRight, withdrawPanelLeft, receiptPanel, receiptRightPanel, receiptLeftPanel, bankImagePanel4, goodbyePanel;
     private JButton backButton;
     private SimpleDateFormat formatter;
@@ -37,6 +37,7 @@ public class GUI {
     private String saldo = "Hier moet het saldo komen";
     private String amount = "0.00";
     private String amountString = "";
+    private String notAllowed = "";
 
     private GridBagConstraints gbc = new GridBagConstraints();
     
@@ -314,7 +315,10 @@ public class GUI {
         withdrawAmountLabel = new JLabel(amount);
         withdrawAmountLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         withdrawAmountLabel.setFont(new Font(null, Font.PLAIN, 40));
-        
+
+        notAllowedLabel = new JLabel(notAllowed);
+        notAllowedLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        notAllowedLabel.setFont(new Font(null, Font.PLAIN, 40));
 
         withdrawPanel = new JPanel();
         withdrawPanel.setLayout(new BoxLayout(withdrawPanel, BoxLayout.Y_AXIS));
@@ -323,6 +327,8 @@ public class GUI {
         withdrawPanel.add(withdrawTextLabel);
         withdrawPanel.add(Box.createVerticalStrut(100));
         withdrawPanel.add(withdrawAmountLabel);
+        withdrawPanel.add(Box.createVerticalStrut(100));
+        withdrawPanel.add(notAllowedLabel);
 
         withdrawContinuLabel = new JLabel("Ga door -->");
         withdrawContinuLabel.setFont(new Font(null, Font.PLAIN, 40));
@@ -506,7 +512,7 @@ public class GUI {
     }
 
     public void transactionAmount(String amountInput) {
-
+        notAllowedLabel.setText("");
         amountString = amountInput;
         try {
             double amountDouble = Double.parseDouble(amountString);
@@ -517,5 +523,14 @@ public class GUI {
             // Handle invalid input
             withdrawAmountLabel.setText("Invalid input");
         }
+    }
+
+    public boolean checkIfEnoughSaldo(double maxAmount, double saldo){
+        if (saldo > maxAmount){
+            notAllowed = "U heeft niet genoeg saldo";
+            notAllowedLabel.setText(notAllowed);
+            return false;
+        }
+        return true;
     }
 }

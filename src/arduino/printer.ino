@@ -44,63 +44,13 @@ int buttonState3;
 int buttonState4;
 
 bool interactionWithATM = true;
+bool passwordIsTrue = false;
 
 byte readbackblock[18];
 int block = 4;
 int block2 = 5;
 int block3 = 6;
 String iban= "";
-
-class KeypadHandler {
-  private:
-    int codeIndex;
-    char code[5];
-
-  public:
-    KeypadHandler() {
-      codeIndex = 0;
-      memset(code, 0, sizeof(code)); // initialize code array to all zeros
-    }
-
-    void readKeypad() {
-      char key = keypad.getKey();
-
-// Check if a numeric key was pressed
-      if (key >= '0' && key <= '9') {
-        if (codeIndex < 4) {
-          // Add the pressed key to the code
-          code[codeIndex++] = key;
-          char buttonPress[] = "plus";
-          Serial.println(buttonPress); // sends a \n with text
-        }
-        // Check if the * key was pressed
-      } else if (key == '*') {
-        // Remove the last digit entered
-        if (codeIndex > 0) {
-          code[--codeIndex] = 0;
-          char buttonPress[] = "minus";
-          Serial.println(buttonPress); // sends a \n with text
-        }
-      }
-
-      // Check if the # key was pressed and the code is complete
-      if (codeIndex == 4 && key == '#') {
-        // Code has been entered, check if it is correct
-        if (strcmp(code, "1234") == 0) {
-          char buttonPress[] = "correct";
-          Serial.println(buttonPress); // sends a \n with text
-          passwordIsTrue = false;
-        } else {
-          char buttonPress[] = "wrong";
-          Serial.println(buttonPress); // sends a \n with text
-        }
-        memset(code, 0, sizeof(code)); // reset code array to all zeros
-        codeIndex = 0;
-      }
-    }
-};
-
-KeypadHandler keypadHandler;
 
 void setup() {
 
@@ -126,6 +76,7 @@ void setup() {
 }
 
 void loop() {
+  passwordIsTrue = false;
   interactionWithATM = true;
   // Reset arrays
   memset(readbackblock, 0, sizeof(readbackblock));
@@ -134,7 +85,7 @@ void loop() {
   if (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial()) {
     
     Serial.println("card selected");
-    char iban2[];
+    char iban2[18];
     
     readBlock(6, readbackblock);//read the block back
     for (int j=0 ; j<16 ; j++)//print the block contents
@@ -146,6 +97,18 @@ void loop() {
     char go[] = "go";
     Serial.println(go); // sends a \n with text
     Serial.println(iban2);
+    while (passwordIsTrue = false)
+    {
+      readKeypadNumber();
+      if (Serial.available()) {
+          String inputString = Serial.readStringUntil('\n'); // Read the incoming data
+          Serial.println(inputString);
+          if (inputString == "passCorrect") {
+            passwordIsTrue = true;
+          }
+      } else{}     
+    }
+    
     buttonPressed();
     mfrc522.PICC_HaltA();
     mfrc522.PCD_StopCrypto1();
@@ -215,6 +178,25 @@ void readBlock(byte blockNumber, byte readbackblock[])
   mfrc522.PCD_StopCrypto1();
 }
 
+ void readKeypadNumber() {
+  char key;
+
+    key = keypad.getKey();
+    if (key) {
+      if (key >= '0' && key <= '9') {
+        Serial.println(key);
+        delay(500);
+      } else if (key == '#') {
+        Serial.println("confirm");
+        delay(500);
+    }   else if (key == '*') {
+        Serial.println("back");
+        delay(500);
+    } 
+    else{};
+  }
+}
+
   void buttonPressed(){
   while(interactionWithATM){
   buttonState1 = digitalRead(button1);
@@ -246,7 +228,10 @@ void readBlock(byte blockNumber, byte readbackblock[])
           else if (inputString = "receipt"){
             printReceipt(iban);
             interactionWithATM = false;
-          }
-      else{}
-  }}
+          } else{};
+        }
+      else{
+        readKeypadNumber();
+      }
+    }
   }

@@ -5,6 +5,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
+import java.text.SimpleDateFormat;  
+import java.util.Date;   
 
 import javax.swing.SwingUtilities;
 
@@ -29,6 +31,7 @@ public class tigoTest {
   String land = "";
   String bank = "";
   String pass = "";
+  double balance = 0.0;
 
   static String url = "jdbc:mysql://145.24.222.188:8649/bank";
    static String username = "sqluser";
@@ -43,7 +46,7 @@ public class tigoTest {
   //code to initialize java and arduino
   public void initialize() {
     serialPort = SerialPort.getCommPort("COM8"); // Personal COM 6 for uno and 8 for mega
-    serialPort.setBaudRate(9600);
+    serialPort.setBaudRate(19200);
     serialPort.openPort();
     serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 500, 0); // set timeout to 500ms
     input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
@@ -97,6 +100,11 @@ public void currentScreenZero(String inputLine) throws IOException {
     System.out.println(iban + " is the iban");
     System.out.println(land + " is the land");
     System.out.println(bank + " is the bank");
+    count = 0;
+    codeString = "";
+    amountString = "";
+    wrongTries = 0;
+    triesLeft = 3;
     updateSetPinNumbersEntered(0);
   }
   else{}
@@ -125,7 +133,7 @@ public void currentScreenOne(String inputLine) throws IOException {
 //Options
 public void currentScreenTwo(String inputLine) throws IOException, InterruptedException{
     if (inputLine.equals("a")){
-        double balance = handleBalanceRequest(land, bank, iban, pass);
+        balance = handleBalanceRequest(land, bank, iban, pass);
         SwingUtilities.invokeLater(() -> scherm.setCheckSaldoScreen());
         System.out.println(balance + " is the balance");
         scherm.retrieveSaldo(balance);
@@ -139,7 +147,11 @@ public void currentScreenTwo(String inputLine) throws IOException, InterruptedEx
     }
     else if (inputLine.equals("d")){
         withdrawAmount = 70;
-        SwingUtilities.invokeLater(() -> scherm.setReceiptScreen());
+        amountString = "70";
+        balance = handleBalanceRequest(land, bank, iban, pass);
+        if (scherm.checkIfEnoughSaldo(balance, withdrawAmount)){
+        SwingUtilities.invokeLater(() -> scherm.setReceiptScreen());}
+        amountString = "";
     }
 }
 
@@ -171,7 +183,9 @@ public void currentScreenFour(String inputLine) throws InterruptedException{
 public void currentScreenFive(String inputLine){
     if (inputLine.equals("d")){
         System.out.println(withdrawAmount + " is the withdraw amount");
+        if (scherm.checkIfEnoughSaldo(balance, withdrawAmount)){
         SwingUtilities.invokeLater(() -> scherm.setReceiptScreen());
+    }
     }
     else if (inputLine.equals("b")){
         SwingUtilities.invokeLater(() -> scherm.setLoggedInScreen());
@@ -197,34 +211,41 @@ public void currentScreenFive(String inputLine){
 
 public void currentScreenSix(String inputLine) throws IOException, InterruptedException{
     Double balanceAfterWithdraw = handleWithdrawRequest(land, bank, iban, pass ,withdrawAmount);
-    System.out.println(balanceAfterWithdraw + " is the balance after withdraw");
+    //System.out.println(balanceAfterWithdraw + " is the balance after withdraw");
     if (inputLine.equals("b")){
-        SwingUtilities.invokeLater(() -> scherm.setGoodbyeScreen());
+        SwingUtilities.invokeLater(() -> scherm.setHomeScreen());
         sendText("done");
+        sendText(amountString);
+        System.out.println(balanceAfterWithdraw + " is the balance after withdraw");
 
     }
     else if (inputLine.equals("d")){
-        SwingUtilities.invokeLater(() -> scherm.setGoodbyeScreen());
+        SwingUtilities.invokeLater(() -> scherm.setHomeScreen());
+        Thread.sleep(500);
         sendText("receipt");
+        getTime();
+        String wString = String.valueOf(withdrawAmount);
+        sendText(wString);
     } 
     
 }
 
-public void sendText(String text) throws IOException, InterruptedException{
-            try (Scanner input = new Scanner(System.in)) {
-                String str = input.nextLine();
-                System.out.println(text);
-                Thread.sleep(1500);
-                serialPort.getOutputStream().write(str.getBytes());
-            }
-            serialPort.getOutputStream().flush();
-        }
-
-public void currentScreenSeven(String inputLine){
-    if (inputLine != null){
-        SwingUtilities.invokeLater(() -> scherm.setHomeScreen());
+public void sendText(String text) throws IOException, InterruptedException {
+    if (serialPort == null || !serialPort.isOpen()) {
+        System.out.println("\nCOM port is not available\n");
+        return;
     }
-    else{}
+
+    Thread.sleep(1500);
+    serialPort.getOutputStream().write(text.getBytes());
+    System.out.println(text);
+}
+
+
+
+public void currentScreenSeven(String inputLine) throws InterruptedException{
+    Thread.sleep(3000);
+    SwingUtilities.invokeLater(() -> scherm.setHomeScreen());
 }
 
 public void logIn(String inputLine){
@@ -335,8 +356,20 @@ public void logIn(String inputLine){
         }
     }
 
+    public void getTime(){
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
+        Date date = new Date();  
+        try {
+            sendText(formatter.format(date));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }   
+    }
   public static void main(String[] args) {
     GUI scherm = new GUI();
+    
     
     EventQueue.invokeLater(() -> {
         scherm.startup();
