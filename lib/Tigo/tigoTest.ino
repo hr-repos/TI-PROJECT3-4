@@ -2,20 +2,26 @@
 #include <SPI.h>//include the SPI bus library
 #include <MFRC522.h>//include the RFID reader library
 #include <Keypad.h>
+#include "Adafruit_Thermal.h"
+#include "adalogo.h"
+#include "adaqrcode.h"
 
 #include "SoftwareSerial.h"
 
 #define SS_PIN 9  //slave select pin
 #define RST_PIN 8  //reset pin
-#define TX_PIN 25 // Arduino transmit  YELLOW WIRE  labeled RX on printer
-#define RX_PIN 24 // Arduino receive   GREEN WIRE   labeled TX on printer
+#define TX_PIN 29 // Arduino transmit  YELLOW WIRE  labeled RX on printer
+#define RX_PIN 28 // Arduino receive   GREEN WIRE   labeled TX on printer
+
+SoftwareSerial mySerial(RX_PIN, TX_PIN); // Declare SoftwareSerial obj first
+Adafruit_Thermal printer(&mySerial);     // Pass addr to printer constructor
 
 // Define the key matrix
 const byte ROWS = 4;
 const byte COLS = 4;
 char keys[ROWS][COLS] = {
   {'1','2','3','A'},
-  {'4','5','6','B'},
+  {'4','5','r 6','B'},
   {'7','8','9','C'},
   {'*','0','#','D'}
 };
@@ -45,6 +51,7 @@ byte readbackblock[18];
 String iban= "";
 String land= "";
 String bank = "";
+String receivedSerialData = "";
 
 void setup() {
 
@@ -56,9 +63,10 @@ void setup() {
   pinMode(7, OUTPUT); 
   digitalWrite(7, LOW);
 
-  Serial.begin(9600);
+  mySerial.begin(19200);  // Initialize SoftwareSerial
+  Serial.begin(19200);
   SPI.begin();               // Init SPI bus
-
+  printer.begin();        // Init printer (same regardless of serial type)
   mfrc522.PCD_Init();        // Init MFRC522 card (in case you wonder what PCD means: proximity coupling device)
         
   for (byte i = 0; i < 6; i++) {
@@ -81,6 +89,7 @@ void cardScanner(){
   // Look for new cards
   if (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial()) {
     char buttonPress[] = "pass found";
+    delay(300);
     Serial.println(buttonPress);
     
     readBlock(6, readbackblock);//read the block back
@@ -172,53 +181,95 @@ void readBlock(byte blockNumber, byte readbackblock[])
     if (key) {
       if (key >= '0' && key <= '9') {
         Serial.println(key);
-        delay(500);
+        delay(300);
       } else if (key == '#') {
         Serial.println("check");
-        delay(500);
+        delay(300);
     }   else if (key == '*') {
         Serial.println("back");
-        delay(500);
+        delay(300);
     } 
     else{};
   }
 }
 
-  void buttonPressed(){
-  while(interactionWithATM){
-  delay(300);
-  buttonState1 = digitalRead(button1);
-  buttonState2 = digitalRead(button2);
-  buttonState3 = digitalRead(button3);
-  buttonState4 = digitalRead(button4);
-  
-      if (buttonState1 == LOW){
-        char buttonPress[] = "a";
-        Serial.println(buttonPress); // sends a \n with text
-        }
-      else if(buttonState2 == LOW){
-        char buttonPress[] = "b";
-        Serial.println(buttonPress); // sends a \n with text
-        }
-      else if(buttonState3 == LOW){
-        char buttonPress[] = "c";
-        Serial.println(buttonPress); // sends a \n with text
-        }
-      else if(buttonState4 == LOW){
-        char buttonPress[] = "d";
-        Serial.println(buttonPress); // sends a \n with text
-        }
-      else if (Serial.available()) {
-          String inputString = Serial.readStringUntil('\n'); // Read the incoming data
-          if(inputString = "done"){
-            interactionWithATM = false;
-          }
-          else if (inputString = "receipt"){
-            interactionWithATM = false;
-          } else{};
-        }
-      else{
-        readKeypadNumber();
-      }
+  void buttonPressed() {
+  while (interactionWithATM) {
+    buttonState1 = digitalRead(button1);
+    buttonState2 = digitalRead(button2);
+    buttonState3 = digitalRead(button3);
+    buttonState4 = digitalRead(button4);
+
+   while (Serial.available()) {
+  String incomingByte = Serial.readStringUntil('\n');
+    if (incomingByte == "done") {
+      interactionWithATM = false;
+       String money = Serial.readStringUntil('\n');
+    } else if (incomingByte == "receipt") {
+      interactionWithATM = false;
+      String currentTime = Serial.readStringUntil('\n');
+      
+      String currentAmount = Serial.readStringUntil('\n');
+      printer.wake();
+      printReceipt(iban, currentTime, currentAmount);
     }
+  }
+   
+
+
+    if (buttonState1 == LOW) {
+      char buttonPress[] = "a";
+      Serial.println(buttonPress);
+      delay(300);
+    } else if (buttonState2 == LOW) {
+      char buttonPress[] = "b";
+      Serial.println(buttonPress);
+      delay(300);
+    } else if (buttonState3 == LOW) {
+      char buttonPress[] = "c";
+      Serial.println(buttonPress);
+      delay(300);
+    } else if (buttonState4 == LOW) {
+      char buttonPress[] = "d";
+      Serial.println(buttonPress);
+      delay(300);
+    } else {
+      readKeypadNumber();
+    }
+  }
+}
+
+void printReceipt(String iban, String currentTime, String currentAmount){
+    printer.justify('C');
+    printer.boldOn();
+    printer.setSize('L');
+
+    printer.println("De Bank bank");
+    printer.println("________________");
+
+    printer.justify('L');
+    printer.setSize('S');
+    printer.boldOff();          
+
+    printer.println("________________");
+
+    printer.print("Account : ");
+    printer.println(iban);
+    printer.print("Amount : "); 
+    printer.println(currentAmount); 
+    printer.println("ATM# : Bank bank");  
+    printer.println("________________");
+
+    printer.feed(1);
+    printer.justify('C');
+    printer.boldOn();
+
+    printer.println("Fijne dag nog");
+    printer.println(currentTime);
+    printer.feed(3);
+
+    printer.sleep();      // Tell printer to sleep
+    delay(3000L);         // Sleep for 3 seconds
+    printer.wake();       // MUST wake() before printing again, even if reset
+    printer.setDefault(); // Restore printer to defaults
   }
