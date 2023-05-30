@@ -39,6 +39,13 @@ MFRC522::MIFARE_Key key;//create a MIFARE_Key struct named 'key', which will hol
 #define button3 26
 #define button4 27
 
+#define IN1 40
+#define IN2 41
+#define IN3 42
+#define IN4 43
+#define IN5 44
+#define IN6 45
+
 int buttonState1;
 int buttonState2;
 int buttonState3;
@@ -62,6 +69,18 @@ void setup() {
 
   pinMode(7, OUTPUT); 
   digitalWrite(7, LOW);
+
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+  
+  
+  // Initialize motor control pins to LOW
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
 
   mySerial.begin(19200);  // Initialize SoftwareSerial
   Serial.begin(19200);
@@ -205,18 +224,20 @@ void readBlock(byte blockNumber, byte readbackblock[])
     if (incomingByte == "done") {
       interactionWithATM = false;
        String money = Serial.readStringUntil('\n');
+       int amount = money.toInt();
+       giveMoney(amount);
     } else if (incomingByte == "receipt") {
       interactionWithATM = false;
       String currentTime = Serial.readStringUntil('\n');
       
       String currentAmount = Serial.readStringUntil('\n');
+      int amount = currentAmount.toInt();
+      giveMoney(amount);
       printer.wake();
       printReceipt(iban, currentTime, currentAmount);
     }
   }
    
-
-
     if (buttonState1 == LOW) {
       char buttonPress[] = "a";
       Serial.println(buttonPress);
@@ -272,4 +293,49 @@ void printReceipt(String iban, String currentTime, String currentAmount){
     delay(3000L);         // Sleep for 3 seconds
     printer.wake();       // MUST wake() before printing again, even if reset
     printer.setDefault(); // Restore printer to defaults
+  }
+
+  void giveMoney(int amount){
+    // Calculate the number of each denomination
+    fiftiesCount = amount / 50;
+    amount %= 50;
+    twentiesCount = amount / 20;
+    amount %= 20;
+    tensCount = amount / 10;
+
+    // Print the counts to the Serial Monitor
+    printCounts();
+    
+    // Rotate the motors
+    rotateMotors();
+
+     // Motor 1
+  for (int i = 0; i < tensCount; i++) {
+    digitalWrite(IN1, HIGH);
+    digitalWrite(IN2, LOW);
+    Serial.println("ten");
+    delay(1000);
+    digitalWrite(IN1, LOW);
+    delay(1000);
+  }
+  
+  // Motor 2
+  for (int i = 0; i < twentiesCount; i++) {
+    digitalWrite(IN3, HIGH);
+    digitalWrite(IN4, LOW);
+    Serial.println("twenty");
+    delay(1000);
+    digitalWrite(IN3, LOW);
+    delay(1000);
+  }
+
+  // Motor 3
+  for (int i = 0; i < fiftiesCount; i++){
+    digitalWrite(IN5, HIGH);
+    digitalWrite(IN6, LOW);
+    Serial.println("fifty");
+    delay(1000);
+    digitalWrite(IN5, LOW);
+    delay(1000);
+    }
   }
