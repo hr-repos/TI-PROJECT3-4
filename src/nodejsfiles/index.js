@@ -56,7 +56,7 @@ app.post('/balance' ,(req, res) => {
     }
 
     if (!req.is('application/json')){
-        console.log(r.expectedJSONError.message + wysd.sanityCheck)
+        console.log(r.expectedJSONError.message + r.wysd.sanityCheck)
         res.status(r.expectedJSONError.code).send(r.expectedJSONError.message);
         return;
     }    
