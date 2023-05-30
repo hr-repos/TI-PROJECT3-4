@@ -39,5 +39,11 @@
 			"code": 400,
 			"message": "LU: JSON error: check variable types"
 		}
+	},
+	"wysd": {
+		"blame": " Blame skelm.",
+		"seeLogs": " Check the public log.",
+		"rtfm": " Check the docs.",
+		"sanityCheck": " Check your HTTP headers."
 	}
 }
