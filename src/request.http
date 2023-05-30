@@ -1,0 +1,15 @@
+POST http://145.24.222.188:8443/balance HTTP/1.1
+Content-Type: application/json
+
+{   
+    "head": {
+            "fromCtry": "LU",
+            "fromBank": "BK",
+            "toCtry":   "LU",
+            "toBank":   "BK"
+        },
+    "body": {
+        "acctNo": "LUX01BANK000001",
+        "pin"   : "5643ffkfydydydiyditiudi6uoofiudf"
+    }
+}
