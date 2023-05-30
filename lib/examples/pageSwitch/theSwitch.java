@@ -1,4 +1,4 @@
-package javafiles.pageSwitch;
+package lib.examples.pageSwitch;
 
 import java.awt.EventQueue;
 import java.io.BufferedReader;
