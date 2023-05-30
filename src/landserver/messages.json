@@ -1,0 +1,49 @@
+{
+	"bank": {
+		"expectedJSONError": {
+			"code": 400,
+			"message": "LU: Bad Request: Expected ` 'Content-Type':'application/json' `."
+		},
+		"somethingHappened": {
+				"code": 500,
+				"message": "LU: Internal server error. Something went wrong while trying to forward your request."
+		},
+		"invalidCertIssuer": {
+				"message": "LU: Invalid certificate. Issuer info:\n"
+		},
+		"unauthorized": {
+				"code": 403,
+				"message": "LU: Unauthorized. Invalid certificate."
+		},
+		"wrongpin": {
+			"code": 403,
+			"message": "LU: Pincode invalid"
+		},
+		"accountnonexistent": {
+			"code": 404,
+			"message": "LU: Account number not recognized"
+		},
+		"accountblocked": {
+			"code": 423,
+			"message": "LU: Account is blocked, contact BANK"
+		},
+		"nowblocked": {
+			"code": 423,
+			"message": "LU: To many attempts, account is now blocked, contact BANK"
+		},		
+		"broke": {
+			"code": 400,
+			"message": "LU: Not enough credit"
+		},
+		"wrongVariableType": {
+			"code": 400,
+			"message": "LU: JSON error: check variable types"
+		}
+	},
+	"wysd": {
+		"blame": " Blame skelm.",
+		"seeLogs": " Check the public log.",
+		"rtfm": " Check the docs.",
+		"sanityCheck": " Check your HTTP headers."
+	}
+}
