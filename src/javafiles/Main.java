@@ -1,14 +1,19 @@
-package javafiles;           
+package javafiles;
+import java.awt.EventQueue;
+
 public class Main {
 
     public static void main(String[] args) {
         GUI scherm = new GUI();
-        scherm.startup();
-        scherm.updateTime();
-        scherm.setCardDetectedScreen();      // tijdelijk om dit scherm te programmeren
-        while (true){   // main loop
+        
+        
+        EventQueue.invokeLater(() -> {
+            scherm.startup();
             scherm.updateTime();
-            
-        }
-    }
+        });
+        communication listener = new communication(scherm);
+        listener.initialize();
+        Thread readDataThread = new Thread(() -> listener.readData());
+        readDataThread.start();
+      }
 }
