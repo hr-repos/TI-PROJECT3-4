@@ -50,17 +50,18 @@ const options = {
 
 
 app.post('/balance' ,(req, res) => {
-    const {error, value} = balanceValidator.validate(req.body, options);
-    if (error){
-        console.log(error)
-        return res.status(r.wrongVariableType.code).send(r.wrongVariableType.message);
-    }
-
     if (!req.is('application/json')){
         console.log(r.expectedJSONError.message + w.sanityCheck)
         res.status(r.expectedJSONError.code).send(r.expectedJSONError.message);
         return;
     }    
+
+    const {error, value} = balanceValidator.validate(req.body, options);
+    if (error){
+        console.log(error)
+        return res.status(r.wrongVariableType.code).send(r.wrongVariableType.message + error);
+    }
+
     const db = dbService.getDbServiceInstance();
     const result = db.getBalance(req.body.body.acctNo, req.body.body.pin);
 
@@ -104,17 +105,18 @@ app.post('/balance' ,(req, res) => {
 });
 
 app.post('/withdraw' ,(req, res) => {
-    const {error, value} = withdrawValidator.validate(req.body, options);
-    if (error){
-        console.log(error)
-        return res.status(r.wrongVariableType.code).send(r.wrongVariableType.message);
-    }
-
     if (!req.is('application/json')){
         console.log(r.expectedJSONError.message + w.sanityCheck)
         res.status(r.expectedJSONError.code).send(r.expectedJSONError.message);
         return;
-    }    
+    } 
+
+    const {error, value} = withdrawValidator.validate(req.body, options);
+    if (error){
+        console.log(error)
+        return res.status(r.wrongVariableType.code).send(r.wrongVariableType.message + error);
+    }
+
     const db = dbService.getDbServiceInstance();
     const result = db.withdraw(req.body.body.acctNo, req.body.body.pin, req.body.body.amount);
 
