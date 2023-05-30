@@ -8,14 +8,14 @@ const r = messages.bank;
 const w = messages.wysd;
 
 app.use(express.json())
- 
+
 app.listen (
     PORT,
     () => console.log(`It's alive on http://localhost:${PORT}`)
-)
-
-const withdrawValidator = Joi.object({
-    head: {
+    )
+    
+    const withdrawValidator = Joi.object({
+        head: {
         fromCtry: Joi.string().required(),
         fromBank: Joi.string().required(),
     },
@@ -43,8 +43,8 @@ const options = {
 
 const bankListBalance = {
     "noob": "http://145.24.222.82:8443/api/balance",
-    "BK":         "http://145.24.222.188:8443/balance",
-    "MOB":          "http://145.24.222.171:8888/balance"
+    "BK":   "http://145.24.222.188:8443/balance",
+    "MOB":  "http://145.24.222.171:8888/balance"
 };
 
 const bankListWithdraw = {
@@ -52,7 +52,7 @@ const bankListWithdraw = {
     "BK":           "http://145.24.222.188:8443/balance",
     "MOB":          "http://145.24.222.171:8888/balance"
 };
- 
+
 
 app.post('/balance' ,(req, res) => {
     const {error, value} = balanceValidator.validate(req.body, options);
@@ -62,29 +62,29 @@ app.post('/balance' ,(req, res) => {
         console.log(error)
         return res.status(r.wrongVariableType.code).send(r.wrongVariableType.message);
     }
-
+    
     // request type check => error wanneer het niet klopt
     if (!req.is('application/json')){
         console.log(r.expectedJSONError.message + w.sanityCheck)
         res.status(r.expectedJSONError.code).send(r.expectedJSONError.message);
         return;
     }
-
+    
     // wanneer de gevraagde bank niet in onze lijst staat moet het verzoek naar noob gestuurd worden
     if (!bankListBalance[req.body.head.toBank]){
         console.log("noob code block");
         return;
     } 
     else {
-         axios.post(bankListBalance[req.body.head.toBank], req.body)
-            .then((goodresponse) => {
-                console.log("good response");
-                // console.log(goodresponse.data);
-                return res.status(200).send(goodresponse.data);
-            })
-            .catch((error) => { 
-                return res.status(error.response.status).send(error.response.data);
-            });
+        axios.post(bankListBalance[req.body.head.toBank], req.body)
+        .then((goodresponse) => {
+            console.log("good response");
+            // console.log(goodresponse.data);
+            return res.status(200).send(goodresponse.data);
+        })
+        .catch((error) => { 
+            return res.status(error.response.status).send(error.response.data);
+        });
     }
 });
 
@@ -94,7 +94,7 @@ app.post('/withdraw' ,(req, res) => {
         console.log(error)
         return res.status(r.wrongVariableType.code).send(r.wrongVariableType.message);
     }
-
+    
     if (!req.is('application/json')){
         console.log(r.expectedJSONError.message + w.sanityCheck)
         res.status(r.expectedJSONError.code).send(r.expectedJSONError.message);
@@ -102,7 +102,7 @@ app.post('/withdraw' ,(req, res) => {
     }    
     const db = dbService.getDbServiceInstance();
     const result = db.withdraw(req.body.body.acctNo, req.body.body.pin, req.body.body.amount);
-
+    
     result
     .then(response => {
         if (response == "ACCOUNTNONEXISTENT"){
@@ -146,7 +146,7 @@ app.post('/withdraw' ,(req, res) => {
         res.status(r.somethingHappened.code).send(r.somethingHappened.message);
         console.log(error);
     }) 
-
+    
 }); 
 
 // testfuncties hieronder
@@ -166,4 +166,35 @@ app.get('/testpin/:password', (req, res) => {
 app.get('/readDB', (req, res) => {
     const db = dbService.getDbServiceInstance(); 
     console.log(db.getAllData());
+});
+
+
+
+
+var http_options = {
+    host: "145.24.222.82",
+    port: 8443,
+    path: "/api/register",
+    key: options.key,
+    cert: options.cert,
+    ca: [fs.readFileSync('./certs/noob-root.pem'),
+         fs.readFileSync('./certs/country-ca.pem')],
+};
+
+
+app.get('/registerland', (req, res) => {
+    https.get(http_options, (response) => {
+        let data = '';
+        response.on('data', (chunk) => {
+            data += chunk;
+        });
+   
+        response.on('end', () => {
+            console.log(data);
+        })
+    })
+    .on('error', (error) => {
+        console.log(error)
+   });
+   return;
 });
