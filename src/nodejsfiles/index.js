@@ -28,7 +28,7 @@ const withdrawValidator = Joi.object({
     body: {
         acctNo: Joi.string().required(),
         pin: Joi.string().required(),
-        amount: Joi.number().required(),
+        amount: Joi.number().required().min(0),
     },
 });
 
