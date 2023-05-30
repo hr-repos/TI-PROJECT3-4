@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 const messages = require('./messages.json');
 const Joi = require("joi");
 const r = messages.bank;
+const w = messages.wysd;
 dotenv.config();
 
 // Betere methode gevonden: https://youtu.be/vrj9AohVhPA?t=1457
@@ -56,7 +57,7 @@ app.post('/balance' ,(req, res) => {
     }
 
     if (!req.is('application/json')){
-        console.log(r.expectedJSONError.message + r.wysd.sanityCheck)
+        console.log(r.expectedJSONError.message + w.sanityCheck)
         res.status(r.expectedJSONError.code).send(r.expectedJSONError.message);
         return;
     }    
@@ -110,7 +111,7 @@ app.post('/withdraw' ,(req, res) => {
     }
 
     if (!req.is('application/json')){
-        console.log(r.expectedJSONError.message + wysd.sanityCheck)
+        console.log(r.expectedJSONError.message + w.sanityCheck)
         res.status(r.expectedJSONError.code).send(r.expectedJSONError.message);
         return;
     }    
