@@ -1,4 +1,4 @@
-package javafiles;
+package lib.examples;
 
 import java.sql.*;
 
