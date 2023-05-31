@@ -45,7 +45,7 @@ public class communication {
 
   //code to initialize java and arduino
   public void initialize() {
-    serialPort = SerialPort.getCommPort("COM8"); // Personal COM 6 for uno and 8 for mega
+    serialPort = SerialPort.getCommPort("COM5"); // Personal COM 6 for uno and 8 for mega and 5 for end
     serialPort.setBaudRate(19200);
     serialPort.openPort();
     serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 500, 0); // set timeout to 500ms
