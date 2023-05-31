@@ -33,7 +33,7 @@ public class BankApiCommunication {
     private boolean checkIfLocalAccount(String acctNo){
         int offset = Math.min(9, acctNo.length());
         String text = acctNo.substring(0, offset);
-        return text.equals("LUX01BANK");
+        return text.equals("LU01BK");
     }
 
     public boolean checkIfError(String inpuString){
