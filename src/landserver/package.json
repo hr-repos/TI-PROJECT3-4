@@ -1,21 +1,18 @@
 {
-  "name": "nodejsfiles",
+  "name": "landserver",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "node index.js",
     "dev": "nodemon index.js"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^16.0.3",
+    "axios": "^1.4.0",
     "express": "^4.18.2",
     "joi": "^17.9.2",
-    "mysql": "^2.18.1",
     "nodemon": "^2.0.22"
   }
 }

@@ -1,0 +1,54 @@
+{
+	"bank": {
+		"expectedJSONError": {
+			"code": 400,
+			"message": "LU: Bad Request: Expected ` 'Content-Type':'application/json' `."
+		},
+		"somethingHappened": {
+			"code": 500,
+			"message": "LU: Internal server error. Something went wrong while trying to forward your request."
+		},
+		"invalidCertIssuer": {
+			"code": 403,
+			"message": "BK: Invalid certificate. Issuer info:\n"
+		},
+		"unauthorized": {
+			"code": 403,
+			"message": "BK: Unauthorized. Invalid certificate."
+		},
+		"wrongpin": {
+			"code": 403,
+			"message": "BK: Pincode invalid"
+		},
+		"accountnonexistent": {
+			"code": 404,
+			"message": "BK: Account number not recognized"
+		},
+		"accountblocked": {
+			"code": 423,
+			"message": "BK: Account is blocked, contact BANK"
+		},
+		"nowblocked": {
+			"code": 423,
+			"message": "BK: To many attempts, account is now blocked, contact BANK"
+		},		
+		"broke": {
+			"code": 400,
+			"message": "BK: Not enough credit"
+		},
+		"wrongVariableType": {
+			"code": 400,
+			"message": "BK: JSON error: check variable types"
+		},
+		"belowzero": {
+			"code": 400,
+			"message": "BK: You can't withdraw a negative amount"
+		}
+	},
+	"wysd": {
+		"blame": " Blame skelm.",
+		"seeLogs": " Check the public log.",
+		"rtfm": " Check the docs.",
+		"sanityCheck": " Check your HTTP headers."
+	}
+}

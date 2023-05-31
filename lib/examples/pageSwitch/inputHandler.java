@@ -1,8 +1,10 @@
-package javafiles.pageSwitch;
+package lib.examples.pageSwitch;
 
 import java.awt.EventQueue;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Scanner;
 
 import javax.swing.SwingUtilities;
 
@@ -78,7 +80,7 @@ public void currentScreenZero(String inputLine) {
 }
 
 //code for pinScreen
-public void currentScreenOne(String inputLine) {
+public void currentScreenOne(String inputLine) throws IOException {
   //checks what the input is
   if (inputLine.equals("plus")) {
       if (count < 5) {
@@ -105,16 +107,22 @@ public void currentScreenOne(String inputLine) {
   } else if (inputLine.equals("correct")) {
     //hier kan het volgende scherm
       SwingUtilities.invokeLater(() -> scherm.setLoggedInScreen());
-  }
+  } //else if (inputLine.equals("go")){
+            //String codeLine = input.readLine();
+            //System.out.println(codeLine);
+            // codeLine is the iban of pass
+            // To Do connect with database
+  //}
 }
 
 //Options
-public void currentScreenTwo(String inputLine){
+public void currentScreenTwo(String inputLine) throws IOException, InterruptedException{
     if (inputLine.equals("a")){
         SwingUtilities.invokeLater(() -> scherm.setCheckSaldoScreen());
     }
     else if (inputLine.equals("b")){
         SwingUtilities.invokeLater(() -> scherm.setHomeScreen());
+        sendText("done");
     }
     else if (inputLine.equals("c")){
         SwingUtilities.invokeLater(() -> scherm.setWithdrawScreen());
@@ -156,21 +164,36 @@ public void currentScreenFive(String inputLine){
         SwingUtilities.invokeLater(() -> scherm.setLoggedInScreen());
     } else if (inputLine.matches("[0-9]")) {
         scherm.transactionAmount(inputLine);
-        System.out.println("i made it");
+        // System.out.println("i made it");
+        SwingUtilities.invokeLater(() -> scherm.setWithdrawScreen());
+    } else if (inputLine.equals("*")){
+        scherm.transactionAmount(inputLine);
         SwingUtilities.invokeLater(() -> scherm.setWithdrawScreen());
     }
 }
 
-public void currentScreenSix(String inputLine){
+public void currentScreenSix(String inputLine) throws IOException, InterruptedException{
     if (inputLine.equals("b")){
         SwingUtilities.invokeLater(() -> scherm.setGoodbyeScreen());
+        //sendText("done");
+
     }
     else if (inputLine.equals("d")){
         SwingUtilities.invokeLater(() -> scherm.setGoodbyeScreen());
+        //sendText("receipt");
     } 
     
 }
 
+public void sendText(String text) throws IOException, InterruptedException{
+            Scanner input = new Scanner(System.in);
+            String str = input.nextLine();
+            System.out.println(text);
+            Thread.sleep(1500);
+            serialPort.getOutputStream().write(str.getBytes());
+            serialPort.getOutputStream().flush();
+            input.close();
+        }
 
 public void currentScreenSeven(String inputLine){
     if (inputLine != null){
