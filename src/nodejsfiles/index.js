@@ -95,6 +95,7 @@ app.post('/balance' ,(req, res) => {
                     'balance': response
                 }
             });
+            console.log("Approved balance request from: " + req.ip);
             res.status(200).send(retObj);
         }
     })
@@ -156,6 +157,7 @@ app.post('/withdraw' ,(req, res) => {
                     'balance': response
                 }
             });
+            console.log("Approved withdraw request from: " + req.ip);
             res.status(200).send(retObj);
         }
     })
